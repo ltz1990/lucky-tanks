@@ -43,7 +43,6 @@ public class MainMenuAction {
 				MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
 			} catch (IOException e) {
 				Debug.error("连接服务器出错！", e);
-				e.printStackTrace();
 			} 
 		}
 	}
