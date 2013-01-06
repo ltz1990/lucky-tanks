@@ -118,10 +118,7 @@ public class ServerThread implements Runnable {
 				return;//如果BUFFER为空，则返回
 			}
 			buffer.flip();//pos=0,lim=N	
-			String msg = Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
-			
-			//System.out.println(buffer);
-			//msgCenter.msgProcess(buffer,client);
+			msgCenter.msgProcess(buffer,client);
 			//System.out.println(buffer);
 			/*for(SelectionKey other:selector.selectedKeys()){//多播 key是所有的，包括cancel的 。selectionKey是活动的				
 				if(!other.isValid()||other==key||other.isAcceptable()){//如果是当前客户端或者如果是服务器通道则不可读

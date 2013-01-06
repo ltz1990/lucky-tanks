@@ -13,6 +13,7 @@ import lc.client.util.ClientConstant;
  */
 public class NetConnection {
 	private static SocketChannel client;
+	public static boolean isRun=true;
 
 	/**
 	 * 打开连接
@@ -47,6 +48,25 @@ public class NetConnection {
 	 */
 	public static SocketChannel getSocketChannel(){
 		return client;
+	}
+	
+	/**
+	 * 启动数据连接线程
+	 */
+	public static void startNetThread() {
+		NetConnection.isRun=true;
+		DataSendThread sender = DataSendThread.getInstance();// 数据发送线程
+		DataAcceptThread accept = DataAcceptThread.getInstance();// 数据接收线程
+		sender.start();
+		accept.start();
+	}
+	
+	/**
+	 * 停止数据连接线程
+	 */
+	public static void stopNetThread(){
+		NetConnection.isRun=false;
+		DataAcceptThread.getInstance().threadFinished();
 	}
 
 }
