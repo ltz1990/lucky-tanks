@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import lc.client.util.ClientConstant;
+import lc.client.util.Debug;
 
 /**
  * 网络连接类
@@ -17,16 +18,12 @@ public class NetConnection {
 
 	/**
 	 * 打开连接
+	 * @throws IOException 
 	 */
-	public static void openConnect() {
-		try {
-			SocketAddress serverAddress = new InetSocketAddress(
-					ClientConstant.SERVER_ADDRESS, ClientConstant.SERVER_PORT);
-			client = SocketChannel.open(serverAddress);
-			client.configureBlocking(false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+	public static void openConnect() throws IOException {
+		SocketAddress serverAddress = new InetSocketAddress(ClientConstant.SERVER_ADDRESS, ClientConstant.SERVER_PORT);
+		client = SocketChannel.open(serverAddress);
+		client.configureBlocking(false);
 	}
 
 	/**
