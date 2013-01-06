@@ -12,6 +12,8 @@ import java.nio.charset.Charset;
 import java.util.Set;
 
 import lc.client.core.controller.GameController;
+import lc.client.ui.components.LMenuItem;
+import lc.client.ui.menu.MainMenu;
 import lc.client.util.Debug;
 
 /**
@@ -64,7 +66,10 @@ public class DataAcceptThread implements Runnable{
 					}
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Debug.error("服务器断开", e);
+				NetConnection.isRun=false;
+				threadFinished();
+				MainMenu.getInstance().setState(LMenuItem.NO_CONN);
 				break;
 			} catch (CancelledKeyException e){
 				e.printStackTrace();
@@ -72,6 +77,8 @@ public class DataAcceptThread implements Runnable{
 			} catch (ClosedSelectorException e){
 				Debug.error("选择器关闭", e);
 				break;
+			}finally{
+				buffer.clear();//清空BUFFER
 			}
 		}
 		threadFinished();
@@ -108,24 +115,18 @@ public class DataAcceptThread implements Runnable{
 	/**
 	 * 读入事件
 	 * @param key
+	 * @throws IOException 
 	 */
-	private void doReadableEvent(SelectionKey key) {
+	private void doReadableEvent(SelectionKey key) throws IOException {
 		// TODO Auto-generated method stub
 		SocketChannel server=(SocketChannel)key.channel();
-		try {
-			int count=server.read(buffer);
-			if(count==-1){
-				server.close();
-			}else if(buffer.position()==0){
-				return;//如果BUFFER为空，则返回
-			}
-			buffer.flip();
-			MsgCenter.MsgProcess(Charset.forName("UTF-8").newDecoder().decode(buffer).toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			buffer.clear();//清空BUFFER
+		int count=server.read(buffer);
+		if(count==-1){
+			server.close();
+		}else if(buffer.position()==0){
+			return;//如果BUFFER为空，则返回
 		}
+		buffer.flip();
+		MsgCenter.MsgProcess(Charset.forName("UTF-8").newDecoder().decode(buffer).toString());
 	}
 }

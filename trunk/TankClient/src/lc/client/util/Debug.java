@@ -26,6 +26,11 @@ public class Debug {
 		System.out.println(obj);
 	}
 	
+	public static void showMessageDialog(Object obj){
+		System.out.println(obj);
+		JOptionPane.showInternalMessageDialog(MainFrame.getInstance().getContentPane(), obj, "消息", JOptionPane.INFORMATION_MESSAGE, null);
+	}
+	
 	/**
 	 * 输出错误信息
 	 * @param obj

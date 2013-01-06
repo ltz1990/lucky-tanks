@@ -16,10 +16,12 @@ import javax.swing.JOptionPane;
 import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
 import lc.client.core.net.NetConnection;
+import lc.client.core.task.LoadingTask;
 import lc.client.ui.components.LMenuItem;
 import lc.client.ui.dialog.GameCreateDialog;
 import lc.client.ui.dialog.GameJoinDialog;
 import lc.client.ui.dialog.KeySettingDialog;
+import lc.client.ui.dialog.LoadingDialog;
 import lc.client.ui.dialog.ServerConfigDialog;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.panel.HomePanel;
@@ -33,17 +35,40 @@ public class MainMenuAction {
 	 */
 	@SuppressWarnings("deprecation")
 	protected static void onLogin(){
-		String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"起个名字");
-		TankFactory factory=TankFactory.getInstance();
-		factory.createTank(name,ClientConstant.USER);
-		if(name!=null){
-			try{
-				NetConnection.openConnect();//初始化连接 连接到服务器但是不通信		
-				NetConnection.startNetThread();// 启动接受和发送数据的连接
-				MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
-			} catch (IOException e) {
-				Debug.error("连接服务器出错！", e);
-			} 
+		final String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"起个名字");
+		LoadingTask task=new LoadingTask() {			
+			@Override
+			public void run() throws Exception {
+				// TODO Auto-generated method stub
+				TankFactory factory = TankFactory.getInstance();
+				factory.createTank(name, ClientConstant.USER);
+				if (name != null) {
+					System.out.println(name);
+					NetConnection.openConnect();// 初始化连接 连接到服务器但是不通信
+					NetConnection.startNetThread();// 启动接受和发送数据的连接					
+				}
+			}
+			
+			@Override
+			public String getSuccessResultMsg() {
+				// TODO Auto-generated method stub
+				return "连接成功";
+			}
+			
+			@Override
+			public String getLoadingMsg() {
+				// TODO Auto-generated method stub
+				return "连接中...";
+			}
+			
+			@Override
+			public String getFailedResultMsg() {
+				// TODO Auto-generated method stub
+				return "无法连接到服务器！";
+			}
+		};
+		if(LoadingDialog.getInstance().popUpMessageDialog(task)){
+			MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
 		}
 	}
 	
@@ -51,24 +76,6 @@ public class MainMenuAction {
 	 * 注册
 	 */
 	protected static void onRegister(){
-		JInternalFrame iFrame=new JInternalFrame("123", false, true,
-                false, false);
-		MainFrame parent = MainFrame.getInstance();
-		//parent.remove(HomePanel.getInstance());
-		Dimension iFrameSize = new Dimension(100, 100);
-        Dimension rootSize = parent.getSize();
-        iFrame.setBounds((rootSize.width - iFrameSize.width) / 2,
-                (rootSize.height - iFrameSize.height) / 2,
-                iFrameSize.width, iFrameSize.height); 
-		parent.getLayeredPane().add(iFrame,0);
-		
-		try {
-			iFrame.setSelected(true);
-		} catch (PropertyVetoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		iFrame.setVisible(true);
 		
 	}
 	
