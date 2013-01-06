@@ -1,10 +1,13 @@
 package lc.client.util;
 
 import java.awt.Toolkit;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import lc.client.ui.dialog.LoadingDialog;
 import lc.client.ui.frame.MainFrame;
 
 /**
@@ -29,9 +32,19 @@ public class Debug {
 	 * @param e
 	 */
 	public static void error(Object obj,Exception e){
-		JOptionPane.showInternalMessageDialog(MainFrame.getInstance().getContentPane(), obj+"\n"+e.getMessage(),"提示",JOptionPane.ERROR_MESSAGE,errorIcon);
-		System.out.println(obj);
+		LoadingDialog.getInstance().closeDialog();//关闭LOADING
+		String msg = obj+"\n"+e.getMessage();
+		JOptionPane.showInternalMessageDialog(MainFrame.getInstance().getContentPane(), msg,"提示",JOptionPane.ERROR_MESSAGE,errorIcon);
+		System.out.println(getNow()+obj+e.getMessage());
 		e.printStackTrace();
+	}
+	
+	/**
+	 * 获得当前时间DateTime
+	 * @return
+	 */
+	public static String getNow(){
+		return "["+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"] ";
 	}
 	
 }
