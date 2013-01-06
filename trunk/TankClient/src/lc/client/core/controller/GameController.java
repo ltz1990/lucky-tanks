@@ -35,8 +35,7 @@ public class GameController {
 	 */
 	public static void startGame() {
 		GameController.gameSwitch=true;
-		// 启动接受和发送数据的连接
-		startNetThread();
+		
 		// 初始化工厂,目前本地坦克的创建是在起名字的时候，需修改
 		initFactory();
 		// 初始化游戏控制器
@@ -63,7 +62,6 @@ public class GameController {
 		 * 3.绘图线程 PanelPaintThread
 		 */
 		GameController.gameSwitch=false;
-		DataAcceptThread.getInstance().threadFinished();//手动结束数据接收线程
 		TankFactory.getInstance().clear();//清空工厂
 		MainFrame mainFrame = MainFrame.getInstance();
 		PlayerController.getInstance().removeListener(mainFrame);//移除控制器
@@ -116,34 +114,6 @@ public class GameController {
 	private static void startTimeThread() {
 		TimerThread timeCtrl = TimerThread.getInstance();// 主时间轴
 		timeCtrl.resetState();
-		/*if(timer==null){
-			timer = new Timer();
-		}else{
-			*//**
-			 * 重置TIMER状态
-			 *//*
-			try {
-				timer.cancel();
-				Field thread=timer.getClass().getDeclaredField("thread");
-				Field state=thread.getType().getDeclaredField("newTasksMayBeScheduled");
-				thread.setAccessible(true);
-				state.setAccessible(true);
-				Object threadObj=thread.get(timer);//提取其中的thread对象
-				state.set(threadObj, true);//重置TIMER的状态，否则会报TIMER已退出的异常
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
 		if(timer!=null){
 			timer.cancel();
 		}
@@ -168,13 +138,4 @@ public class GameController {
 
 	}
 
-	/**
-	 * 启动数据连接线程
-	 */
-	private static void startNetThread() {
-		DataSendThread sender = DataSendThread.getInstance();// 数据发送线程
-		DataAcceptThread accept = DataAcceptThread.getInstance();// 数据接收线程
-		sender.start();
-		accept.start();
-	}
 }

@@ -46,7 +46,7 @@ public class DataSendThread implements Runnable{
 	@Override
 	public void run() {
 		client=NetConnection.getSocketChannel();
-		while(GameController.gameSwitch){
+		while(NetConnection.isRun){
 			int size = this.msgList.size();
 			if(0<size){
 				sendMessage(this.msgList.get(0));

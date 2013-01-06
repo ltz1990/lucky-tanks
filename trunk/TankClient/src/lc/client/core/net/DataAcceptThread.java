@@ -51,7 +51,7 @@ public class DataAcceptThread implements Runnable{
 	public void run() {
 		initSocketChannel();
 		buffer=ByteBuffer.allocate(BUFFER_SIZE);
-		while (GameController.gameSwitch) {
+		while (NetConnection.isRun) {
 			try {
 				selector.select();
 				Set<SelectionKey> keys = selector.selectedKeys();

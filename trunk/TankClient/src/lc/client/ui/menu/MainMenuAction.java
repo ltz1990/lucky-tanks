@@ -30,12 +30,14 @@ public class MainMenuAction {
 	/**
 	 * 登陆事件
 	 */
+	@SuppressWarnings("deprecation")
 	protected static void onLogin(){
 		String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"起个名字");
 		TankFactory factory=TankFactory.getInstance();
 		factory.createTank(name,ClientConstant.USER);
 		if(name!=null){
-			NetConnection.openConnect();//初始化连接 连接到服务器但是不通信
+			NetConnection.openConnect();//初始化连接 连接到服务器但是不通信		
+			NetConnection.startNetThread();// 启动接受和发送数据的连接
 			MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
 		}
 	}
