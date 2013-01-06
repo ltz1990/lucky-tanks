@@ -24,6 +24,7 @@ import lc.client.ui.dialog.ServerConfigDialog;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.panel.HomePanel;
 import lc.client.util.ClientConstant;
+import lc.client.util.Debug;
 
 public class MainMenuAction {
 
@@ -36,9 +37,14 @@ public class MainMenuAction {
 		TankFactory factory=TankFactory.getInstance();
 		factory.createTank(name,ClientConstant.USER);
 		if(name!=null){
-			NetConnection.openConnect();//初始化连接 连接到服务器但是不通信		
-			NetConnection.startNetThread();// 启动接受和发送数据的连接
-			MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
+			try{
+				NetConnection.openConnect();//初始化连接 连接到服务器但是不通信		
+				NetConnection.startNetThread();// 启动接受和发送数据的连接
+				MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
+			} catch (IOException e) {
+				Debug.error("连接服务器出错！", e);
+				e.printStackTrace();
+			} 
 		}
 	}
 	
