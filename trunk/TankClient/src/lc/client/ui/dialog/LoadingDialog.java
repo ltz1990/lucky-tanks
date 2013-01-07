@@ -17,6 +17,7 @@ import lc.client.util.FontSetting;
 
 /**
  * 载入提示框
+ * 含有任务队列机制，每次展示LOADING的时候都有一个任务与之对应
  * @author LUCKY
  *
  */
@@ -66,7 +67,7 @@ public class LoadingDialog extends LDialog {
 	}
 	
 	/**
-	 * 弹出载入框，自带消息
+	 * 弹出载入框，对应任务
 	 * @param msg
 	 */
 	public boolean popUpMessageDialog(LoadingTask task){
@@ -82,12 +83,16 @@ public class LoadingDialog extends LDialog {
 		return false;
 	}
 	
+	/**
+	 * 待执行任务列表
+	 * @return
+	 */
 	List<LoadingTask> getTaskList(){
 		return taskList;
 	}
 	
 	/**
-	 * 载入框相对的载入任务
+	 * Loading对话框相对的载入任务线程
 	 * @author LUCKY
 	 */
 	private class RunLoadingTask implements Runnable{
@@ -102,16 +107,20 @@ public class LoadingDialog extends LDialog {
 			while(true){
 				try {
 					while(getTaskList().size()>0){
-						if(!Thread.State.WAITING.equals(getLastPopUpThread().getState())){//如果主线程不是等待状态，说明当前窗口还没有被设置为模态
+						/**
+						 * 如果主线程不是等待状态，说明当前窗口还没有被设置为模态
+						 * 否则说明当前loading对话框已经处于模态，已经创建完成，可以开始执行本次展示对应的任务
+						 */
+						if(!Thread.State.WAITING.equals(getLastPopUpThread().getState())){
 							Thread.sleep(100);
 							Debug.debug("主线程处于非等待状态,认为模态未开始"+getLastPopUpThread().getState());
 							continue;
 						}
 						LoadingTask task=getTaskList().get(0);
 						try{
-							task.run();
+							task.run();//执行任务
 							loadingResult=true;//Loading任务执行成功
-							LoadingDialog.getInstance().closeDialog();//关闭窗口
+							LoadingDialog.getInstance().closeDialog();//关闭Loading
 							if(task.getSuccessResultMsg()!=null){
 								Debug.showMessageDialog(task.getSuccessResultMsg());
 							}//显示成功消息							
