@@ -26,12 +26,13 @@ import lc.server.log.Debug;
  *
  */
 public class ServerThread implements Runnable {
+	public static final int PORT=9999;
+	
 	private Thread thread;
 	private ServerSocketChannel serverSocketChannel;
 	private Selector selector;
 	private int activeSockets;//活动链接数
 	private static int BUFFER_SIZE=5120;
-	private static int PORT=9999;
 	ByteBuffer buffer=null;
 	
 	private MsgCenter msgCenter;//一个房间一个消息中心
