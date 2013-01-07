@@ -2,6 +2,7 @@ package lc.server.start;
 
 import lc.server.core.thread.ServerThread;
 import lc.server.tools.ServerRunTimeEnvironment;
+import lc.server.webservice.ServiceController;
 
 public class ServerStart {
 
@@ -12,7 +13,7 @@ public class ServerStart {
 		// TODO Auto-generated method stub
 		ServerThread thread=new ServerThread();
 		thread.start();
-		ServerRunTimeEnvironment.getActiveGameThread();
+		ServiceController.publishWebService();
 	}
 
 }
