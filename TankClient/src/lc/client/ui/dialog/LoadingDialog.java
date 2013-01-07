@@ -16,7 +16,7 @@ import lc.client.util.Debug;
 import lc.client.util.FontSetting;
 
 /**
- * 载入提示框
+ * Loading提示框
  * 含有任务队列机制，每次展示LOADING的时候都有一个任务与之对应
  * @author LUCKY
  *
@@ -28,7 +28,7 @@ public class LoadingDialog extends LDialog {
 	private RunLoadingTask loadingTask;//任务线程
 	boolean loadingResult; //执行结果
 	/**
-	 * 得到载入界面
+	 * Loading界面
 	 * @return
 	 */
 	public static synchronized LoadingDialog getInstance(){
@@ -68,7 +68,8 @@ public class LoadingDialog extends LDialog {
 	
 	/**
 	 * 弹出载入框，对应任务
-	 * @param msg
+	 * @param task
+	 * @return 执行是否成功
 	 */
 	public boolean popUpMessageDialog(LoadingTask task){
 		if(!this.isShowing()){
@@ -109,7 +110,7 @@ public class LoadingDialog extends LDialog {
 					while(getTaskList().size()>0){
 						/**
 						 * 如果主线程不是等待状态，说明当前窗口还没有被设置为模态
-						 * 否则说明当前loading对话框已经处于模态，已经创建完成，可以开始执行本次展示对应的任务
+						 * 否则说明当前loading对话框已经处于模态，已经创建完成，可以开始执行本次loading对应的任务
 						 */
 						if(!Thread.State.WAITING.equals(getLastPopUpThread().getState())){
 							Thread.sleep(100);
