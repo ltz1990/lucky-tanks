@@ -13,7 +13,7 @@ public class ServerWebServiceImpl implements ServerWebService{
 
 	@Override
 	public MsgEntry login(String username, String password) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub.
 		MsgEntry msg=new MsgEntry();
 		msg.result=false;
 		return msg;
@@ -25,12 +25,6 @@ public class ServerWebServiceImpl implements ServerWebService{
 		MsgEntry msg=new MsgEntry();
 		msg.result=true;
 		msg.resultMessage="³É¹¦";
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return msg;
 	}	
 }
