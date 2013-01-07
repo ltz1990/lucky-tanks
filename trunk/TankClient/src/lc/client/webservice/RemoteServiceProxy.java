@@ -12,21 +12,23 @@ import java.net.URL;
 
 import javax.xml.namespace.QName;
 
+import lc.client.util.ClientConstant;
 import lc.client.webservice.wscode.ServerWebService;
 import lc.client.webservice.wscode.ServerWebServiceImplService;
 
 /**
  * 远程方法代理类
  * @author LUCKY
- *
+ *	根据webservice地址自动生成客户端工具代码：wsimport -p [包名] -keep [WEBSERVICE路径]
+ * 	例子：wsimport -p my.client -keep http://localhost:9998/service?wsdl
  */
 public class RemoteServiceProxy{
 	private static RemoteServiceProxy remoteService;
 	private static ServerWebService proxy;
 	private RemoteServiceProxy(){
 		try {
-			String url = "http://localhost:9998/service?wsdl";
-			ServerWebServiceImplService service=new ServerWebServiceImplService();//(new URL(url), new QName("http://webservice.server.lc/", "ServerWebServiceImplService"));
+			String url = "http://"+ClientConstant.SERVER_ADDRESS+":"+(ClientConstant.SERVER_PORT-1)+"/service?wsdl";
+			ServerWebServiceImplService service=new ServerWebServiceImplService(new URL(url), new QName("http://webservice.server.lc/", "ServerWebServiceImplService"));
 			proxy=service.getServerWebServiceImplPort();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
