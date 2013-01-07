@@ -37,31 +37,23 @@ public class MainMenuAction {
 	protected static void onLogin(){
 		final String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"起个名字");
 		LoadingTask task=new LoadingTask() {			
-			@Override
 			public void run() throws Exception {
-				// TODO Auto-generated method stub
 				TankFactory factory = TankFactory.getInstance();
 				factory.createTank(name, ClientConstant.USER);
 				if (name != null) {
 					System.out.println(name);
-					NetConnection.openConnect();// 初始化连接 连接到服务器但是不通信
+					NetConnection.openConnect();// 初始化连接
 					NetConnection.startNetThread();// 启动接受和发送数据的连接					
 				}
 			}
-			
-			@Override
 			public String getSuccessResultMsg() {
 				// TODO Auto-generated method stub
 				return "连接成功";
 			}
-			
-			@Override
 			public String getLoadingMsg() {
 				// TODO Auto-generated method stub
 				return "连接中...";
 			}
-			
-			@Override
 			public String getFailedResultMsg() {
 				// TODO Auto-generated method stub
 				return "无法连接到服务器！";
