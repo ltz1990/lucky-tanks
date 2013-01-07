@@ -6,6 +6,7 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -27,6 +28,7 @@ import lc.client.ui.frame.MainFrame;
 import lc.client.ui.panel.HomePanel;
 import lc.client.util.ClientConstant;
 import lc.client.util.Debug;
+import lc.client.webservice.RemoteServiceProxy;
 
 public class MainMenuAction {
 
@@ -68,7 +70,8 @@ public class MainMenuAction {
 	 * 注册
 	 */
 	protected static void onRegister(){
-		
+		String abc=RemoteServiceProxy.getInstance().register("a","b").getResultMessage();
+		Debug.debug("远程方法调用结束 "+abc);
 	}
 	
 	public static JDesktopPane getDesktopPaneForComponent(Component parentComponent) {
