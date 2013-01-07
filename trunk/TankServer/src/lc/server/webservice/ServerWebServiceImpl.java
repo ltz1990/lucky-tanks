@@ -7,7 +7,8 @@ import javax.jws.WebService;
  * @author LUCKY
  *
  */
-@WebService(endpointInterface="lc.server.webservice.ServerWebService")
+//如果采用接口+实现类的方式，必须指定目标命名空间
+@WebService(targetNamespace="http://webservice.server.lc/",endpointInterface="lc.server.webservice.ServerWebService")
 public class ServerWebServiceImpl implements ServerWebService{
 
 	@Override
@@ -23,6 +24,13 @@ public class ServerWebServiceImpl implements ServerWebService{
 		// TODO Auto-generated method stub
 		MsgEntry msg=new MsgEntry();
 		msg.result=true;
+		msg.resultMessage="成功";
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return msg;
 	}	
 }
