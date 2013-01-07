@@ -33,6 +33,11 @@ public class ServerWebServiceImplService
         SERVERWEBSERVICEIMPLSERVICE_WSDL_LOCATION = url;
     }
 
+    /**
+     * 指定远程服务地址和服务命名空间
+     * @param wsdlLocation
+     * @param serviceName
+     */
     public ServerWebServiceImplService(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
