@@ -18,7 +18,6 @@ public class ServerWebServiceImpl implements ServerWebService{
 		msg.result=false;
 		return msg;
 	}
-
 	@Override
 	public MsgEntry register(String username, String password) {
 		// TODO Auto-generated method stub
