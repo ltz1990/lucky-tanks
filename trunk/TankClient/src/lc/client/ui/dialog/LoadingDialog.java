@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import lc.client.core.task.LoadingTask;
+import lc.client.start.ClientStart;
 import lc.client.ui.components.LDialog;
 import lc.client.ui.frame.MainFrame;
 import lc.client.util.ClientConstant;
@@ -46,7 +47,7 @@ public class LoadingDialog extends LDialog {
 		text.setBounds((this.getWidth()-labelWidth>>1)-15,(this.getHeight()-labelHeight>>1)-19, labelWidth, labelHeight+10);
 		text.setHorizontalAlignment(SwingConstants.CENTER);
 		this.add(text);
-		text.setIcon(new ImageIcon(Class.class.getResource("/images/loading.gif")));
+		text.setIcon(new ImageIcon(ClientStart.class.getResource("/images/loading.gif")));
 		FontSetting.setChildrenFont(this,new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 12));
 		
 		taskList=new LinkedList<LoadingTask>();
