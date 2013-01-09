@@ -32,7 +32,7 @@ public class DataSendThread implements Runnable{
 	 * @param conn
 	 * @return
 	 */
-	public static DataSendThread getInstance(){
+	public static synchronized DataSendThread getInstance(){
 		if(dataSendThread==null){
 			dataSendThread=new DataSendThread();
 		}

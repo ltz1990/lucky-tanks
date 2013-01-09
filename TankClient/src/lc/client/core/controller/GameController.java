@@ -114,7 +114,7 @@ public class GameController {
 	private static void startTimeThread() {
 		TimerThread timeCtrl = TimerThread.getInstance();// 主时间轴
 		timeCtrl.resetState();
-		if(timer!=null){
+		if(timer!=null){//退出旧计时器
 			timer.cancel();
 		}
 		timer=new Timer();

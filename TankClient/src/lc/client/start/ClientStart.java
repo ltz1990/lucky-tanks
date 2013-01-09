@@ -18,8 +18,20 @@ import lc.client.util.FontSetting;
 public class ClientStart {
 	public static void main(String [] args){
 		ClientStart start=new ClientStart();
+		//appletInit();
 		start.setLookAndFeel();	
 		start.initClient();
+	}
+
+	private static void appletInit() {
+		try {
+			ClassLoader classLoader = ClientStart.class.getClassLoader();
+			//Class.forName("lc.client.util.Debug",false,classLoader);
+			Class.forName("javax.swing.ImageIcon",false,classLoader);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
