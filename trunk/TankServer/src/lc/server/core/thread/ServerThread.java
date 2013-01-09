@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import lc.server.log.Debug;
+import lc.server.tools.ServerConstant;
 
 /**
  * 服务端游戏主线程
@@ -26,13 +27,11 @@ import lc.server.log.Debug;
  *
  */
 public class ServerThread implements Runnable {
-	public static final int PORT=9999;
 	
 	private Thread thread;
 	private ServerSocketChannel serverSocketChannel;
 	private Selector selector;
 	private int activeSockets;//活动链接数
-	private static int BUFFER_SIZE=5120;
 	ByteBuffer buffer=null;
 	
 	private MsgCenter msgCenter;//一个房间一个消息中心
@@ -47,7 +46,7 @@ public class ServerThread implements Runnable {
 			serverSocketChannel.configureBlocking(false);//非阻塞式
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);//注册服务器通道为接受
 			ServerSocket socket=serverSocketChannel.socket();//服务器对应的SOCKET
-			socket.bind(new InetSocketAddress(PORT));//绑定端口
+			socket.bind(new InetSocketAddress(ServerConstant.SERVER_PORT));//绑定端口
 			msgCenter=new MsgCenter();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +72,7 @@ public class ServerThread implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		Debug.debug("服务主线程启动");
-		buffer=ByteBuffer.allocate(BUFFER_SIZE);//一个新的缓冲区 POS=0，LIM=1024
+		buffer=ByteBuffer.allocate(ServerConstant.BUFFER_SIZE);//一个新的缓冲区 POS=0，LIM=1024
 		while(true){
 			try {
 				selector.select();
