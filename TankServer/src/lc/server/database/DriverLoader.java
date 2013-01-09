@@ -15,6 +15,7 @@ import java.util.jar.JarFile;
 import javax.management.ReflectionException;
 
 import lc.server.log.Debug;
+import lc.server.tools.ServerConstant;
 
 /**
  * 外部JAR加载类
@@ -55,8 +56,8 @@ public class DriverLoader extends URLClassLoader{
 	 * @throws MalformedURLException 
 	 * @throws SQLException 
 	 */
-	public void loadDatabaseDriver() throws InstantiationException, IllegalAccessException, ClassNotFoundException, MalformedURLException, SQLException{
-			File file=new File(new File(System.getProperty("java.class.path")).getParent()+"\\driver\\mysql-connector-java-5.1.13-bin.jar");
+	public Driver loadDatabaseDriver() throws InstantiationException, IllegalAccessException, ClassNotFoundException, MalformedURLException, SQLException{
+			File file=new File(ServerConstant.SERVER_PATH+ServerConstant.DB_JAR_URL);
 			URL url=null;
 			url = file.toURI().toURL();
 			add(url);//加载JAR
@@ -92,15 +93,11 @@ public class DriverLoader extends URLClassLoader{
 			 * 但是我们可以绕过DriverManager，手动将这个实例化对象赋给jdbc的driver接口，然后调用接口的connect方法去获得数据库连接！！！
 			 * Connection result = di.driver.connect(url, info); info=prop{user,password};
 			 * 参考DriverManager的getConnection方法;
+			 * 需要注意的是，这里涉及到一个驱动注册的问题，但是貌似mysql的驱动是加载就自动注册的（static代码块）。
 			 */
-			Driver driver=(Driver)this.loadClass("com.mysql.jdbc.Driver").newInstance();
-			Properties prop = new Properties();
-			prop.put("user","luckyta1nk");
-			prop.put("password","luckytank");
-			driver.connect("jdbc:mysql://localhost:3306/lucky_tank?useUnicode=true&characterEncoding=UTF-8", prop);
-		 	//clazz.forName(clazz.getName());
-		 	//this.getParent().getParent().loadClass("com.mysql.jdbc.Driver");
+			Driver driver=(Driver)this.loadClass(ServerConstant.DB_DRIVER).newInstance();
 			Debug.debug("数据库驱动加载成功!");
+			return driver;
 	}
 	
 }
