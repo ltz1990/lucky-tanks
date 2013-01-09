@@ -38,6 +38,7 @@ public class MainMenuAction {
 	@SuppressWarnings("deprecation")
 	protected static void onLogin(){
 		final String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"Æð¸öÃû×Ö");
+		if(name==null) return;
 		LoadingTask task=new LoadingTask() {			
 			public void run() throws Exception {
 				TankFactory factory = TankFactory.getInstance();
