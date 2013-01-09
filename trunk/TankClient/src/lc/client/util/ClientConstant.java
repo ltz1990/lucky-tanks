@@ -51,6 +51,7 @@ public class ClientConstant {
 	public static int TEXTFIELD_WIDTH=150;//文本框
 	public static int TEXTFIELD_HEIGHT=25;
 	
+	private static String FOLDER_PATH=new File(System.getProperty("java.class.path")).getParent();//文件夹路径
 	private static String PROP_PATH=null;//配置文件路径	
 	private static Properties prop; //配置文件
 	
@@ -61,7 +62,7 @@ public class ClientConstant {
 	 * 加载系统变量
 	 */
 	public static void loadProperties(){
-		PROP_PATH=new File(System.getProperty("java.class.path")).getParent()+"\\config.properties";
+		PROP_PATH=FOLDER_PATH+"\\config.properties";
 		try {
 			if(prop==null){
 				prop=new Properties();
