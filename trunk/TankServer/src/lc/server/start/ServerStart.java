@@ -5,12 +5,13 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-import lc.server.core.thread.ServerThread;
 import lc.server.database.DBConnection;
 import lc.server.database.DriverLoader;
+import lc.server.service.gameserver.ServerThread;
+import lc.server.service.httpserver.LuckyHttpServer;
+import lc.server.service.webservice.ServiceController;
 import lc.server.tools.ServerConstant;
 import lc.server.tools.ServerRunTimeEnvironment;
-import lc.server.webservice.ServiceController;
 
 public class ServerStart {
 
@@ -20,10 +21,10 @@ public class ServerStart {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ServerConstant.loadProperties();
+		LuckyHttpServer.getInstance().start();
+		ServiceController.publishWebService();
 		ServerThread thread=new ServerThread();
 		thread.start();
-		ServiceController.publishWebService();
-		DBConnection.getConnection();
 	}
 
 }
