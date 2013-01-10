@@ -7,11 +7,11 @@
  */
 package lc.client.webservice;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.namespace.QName;
 
+import lc.client.start.ClientStart;
 import lc.client.util.ClientConstant;
 import lc.client.webservice.wscode.ServerWebService;
 import lc.client.webservice.wscode.ServerWebServiceImplService;
@@ -27,8 +27,11 @@ public class RemoteServiceProxy{
 	private static ServerWebService proxy;
 	private RemoteServiceProxy(){
 		try {
-			String url = "http://"+ClientConstant.SERVER_ADDRESS+":"+(ClientConstant.SERVER_PORT-1)+"/service?wsdl";
-			ServerWebServiceImplService service=new ServerWebServiceImplService(new URL(url), new QName("http://webservice.server.lc/", "ServerWebServiceImplService"));
+			String url = "http://"+ClientConstant.SERVER_ADDRESS+":"+(ClientConstant.SERVER_PORT-1)+"/WebService?wsdl";
+			//ClientStart.class.getClassLoader().loadClass("lc.client.webservice.wscode.ServerWebServiceImplService");
+			Class.forName("lc.client.webservice.wscode.ServerWebServiceImplService", false, ClientStart.class.getClassLoader());
+			Class.forName("javax.xml.ws.spi.Provider", false, ClientStart.class.getClassLoader());
+			ServerWebServiceImplService service=new ServerWebServiceImplService(new URL(url), new QName("http://webservice.service.server.lc/", "ServerWebServiceImplService"));
 			proxy=service.getServerWebServiceImplPort();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
