@@ -5,7 +5,7 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.Map;
 
-import lc.server.core.thread.ServerThread;
+import lc.server.service.gameserver.ServerThread;
 
 public class ServerRunTimeEnvironment {
 	

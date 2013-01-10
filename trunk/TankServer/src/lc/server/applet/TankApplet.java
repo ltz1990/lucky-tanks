@@ -12,12 +12,21 @@ import java.security.Permission;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 
-public class TankAppet extends JApplet {
+public class TankApplet extends JApplet {
 	private static final long serialVersionUID = 1L;
 	public String clientURL;//客户端URL
 	public String startClass;//启动类
 	public String startMethod;//启动方法
 	
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		super.init();
+		clientURL=getParameter("clientURL");
+		startClass=getParameter("startClass");
+		startMethod=getParameter("startMethod");
+	}
+
 	/**
 	 * 取消安全管理器
 	 * @author LUCKY
@@ -37,21 +46,16 @@ public class TankAppet extends JApplet {
 	public void start() {
 		// TODO Auto-generated method stub
 		super.start();
-		// name="abc11";
 		JButton jButton = new JButton("走你！");
 		jButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e1) {
 				try {
 					System.setSecurityManager(new DefaultSecurityManager());
-					URLClassLoader loader = new URLClassLoader(
-							new URL[] { new URL(
-									"http://10.162.0.42:8080/YBFrame/TANKCLIENT.jar") });
-					Class<?> loadClass = loader
-							.loadClass("lc.client.start.ClientStart");
-					Method main = loadClass.getMethod("main", String[].class);
-					main.invoke(loadClass.newInstance(),
-							new Object[] { new String[0] });
+					URLClassLoader loader = new URLClassLoader(new URL[] { new URL(clientURL) });
+					Class<?> loadClass = loader.loadClass(startClass);
+					Method main = loadClass.getMethod(startMethod, String[].class);
+					main.invoke(loadClass.newInstance(),new Object[] { new String[0] });
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -106,6 +110,4 @@ public class TankAppet extends JApplet {
 	public void setStartMethod(String startMethod) {
 		this.startMethod = startMethod;
 	}
-	
-	
 }
