@@ -41,7 +41,7 @@ public class ClientConstant {
 	public static int BULLET_RAD=6;//炮弹半径
 	public static int BULLET_MAX_AMOUNT=3;//一个坦克拥有的炮弹数量
 	
-	public static String SERVER_ADDRESS="192.168.52.1";
+	public static String SERVER_ADDRESS="127.0.0.1";
 	public static int SERVER_PORT=9999;
 	
 	public static int BTN_WIDTH=55;//按钮
@@ -51,7 +51,11 @@ public class ClientConstant {
 	public static int TEXTFIELD_WIDTH=150;//文本框
 	public static int TEXTFIELD_HEIGHT=25;
 	
+	/**
+	 * 启用这个路径表示配置文件在当前JAR所在文件夹
+	 */
 	private static String FOLDER_PATH=new File(System.getProperty("java.class.path")).getParent();//文件夹路径
+	public static String USER_PATH=System.getProperty("user.home")+"\\luckyCache";
 	private static String PROP_PATH=null;//配置文件路径	
 	private static Properties prop; //配置文件
 	
@@ -62,14 +66,28 @@ public class ClientConstant {
 	 * 加载系统变量
 	 */
 	public static void loadProperties(){
-		PROP_PATH=FOLDER_PATH+"\\config.properties";
+		//PROP_PATH=FOLDER_PATH+"\\config.properties";
+		PROP_PATH=USER_PATH+"\\config.properties";
 		try {
 			if(prop==null){
 				prop=new Properties();
 			}
-			prop.load(new FileInputStream(PROP_PATH));
-			loadServerConfig();
-			loadKeySetting();
+			File propFile = new File(PROP_PATH);
+			if(propFile.exists()){//如果配置文件存在，则读配置文件
+				prop.load(new FileInputStream(propFile));
+				loadServerConfig();
+				loadKeySetting();
+			}else{
+				new File(propFile.getParent()).mkdirs();
+				prop.put("SERVER_ADDRESS", SERVER_ADDRESS);
+				prop.put("SERVER_PORT", Integer.toString(SERVER_PORT));
+				prop.put("KEY_UP", Integer.toString(KEY_UP));
+				prop.put("KEY_DOWN", Integer.toString(KEY_DOWN));
+				prop.put("KEY_LEFT", Integer.toString(KEY_LEFT));
+				prop.put("KEY_RIGHT", Integer.toString(KEY_RIGHT));
+				prop.put("KEY_SHOT", Integer.toString(KEY_SHOT));
+				prop.store(new FileOutputStream(propFile), "@author Lcuky");
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
