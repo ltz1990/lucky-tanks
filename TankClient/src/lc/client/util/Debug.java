@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import lc.client.start.ClientStart;
 import lc.client.ui.dialog.LoadingDialog;
 import lc.client.ui.frame.MainFrame;
 
@@ -16,7 +17,13 @@ import lc.client.ui.frame.MainFrame;
  *
  */
 public class Debug {
-	public static final ImageIcon errorIcon=new ImageIcon(Toolkit.getDefaultToolkit().createImage(Class.class.getResource("/images/error_dialog_icon.png")).getScaledInstance(73, 82, 1));
+	/**
+	 * 为什么在applet上，此处会出异常？
+	 * 因为拿到的图片是从Class.class去拿的，而Class是元类型，此类型是由applet的加载器去加载的，
+	 * 而applet的JAR包下并没有我的图片资源，所以加载失败、
+	 * 这里要用到我启动方法的ClassLoader去加载图片，才能在客户端包下正常加载
+	 */
+	public static final ImageIcon errorIcon=new ImageIcon(Toolkit.getDefaultToolkit().createImage(ClientStart.class.getResource("/images/error_dialog_icon.png")).getScaledInstance(73, 82, 1));
 	
 	/**
 	 * 输出服务端信息
