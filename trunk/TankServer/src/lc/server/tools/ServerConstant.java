@@ -12,7 +12,7 @@ import java.util.Properties;
  *
  */
 public class ServerConstant {
-	public static String SERVER_PATH=new File(System.getProperty("java.class.path")).getParent()+"\\";
+	public static String SERVER_PATH=new File(System.getProperty("user.dir"))+"\\";
 	
 	public static int SERVER_PORT;//服务器端口
 	public static String DB_DRIVER;//驱动类

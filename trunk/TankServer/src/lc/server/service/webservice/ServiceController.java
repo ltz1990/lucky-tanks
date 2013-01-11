@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 
 import javax.xml.ws.Endpoint;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 import lc.server.service.gameserver.ServerThread;
 import lc.server.service.httpserver.LuckyHttpServer;
 import lc.server.tools.ServerConstant;
@@ -25,6 +25,6 @@ public class ServiceController {
 		ServerWebServiceImpl service = new ServerWebServiceImpl();
 		//发布到httpContext中去
 		Endpoint.create(service).publish(LuckyHttpServer.getInstance().getWebServiceContext());
-		Debug.debug("WebService 发布完成");
+		LogUtil.logger.info("WebService 发布完成");
 	}
 }

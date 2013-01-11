@@ -16,7 +16,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 import lc.server.tools.ServerConstant;
 
 /**
@@ -50,7 +50,7 @@ public class ServerThread implements Runnable {
 			msgCenter=new MsgCenter();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Debug.error("初始化服务器出现异常",e);
+			LogUtil.logger.error("初始化服务器出现异常",e);
 			e.printStackTrace();
 		}
 	}
@@ -71,14 +71,14 @@ public class ServerThread implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		Debug.debug("服务主线程启动");
+		LogUtil.logger.info("服务主线程启动");
 		buffer=ByteBuffer.allocate(ServerConstant.BUFFER_SIZE);//一个新的缓冲区 POS=0，LIM=1024
 		while(true){
 			try {
 				selector.select();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				Debug.error("选择器在调select()方法时出错", e);
+				LogUtil.logger.error("选择器在调select()方法时出错", e);
 				e.printStackTrace();
 			}
 			Set<SelectionKey> keys=selector.selectedKeys();//获得活动链接
@@ -112,7 +112,7 @@ public class ServerThread implements Runnable {
 		try {
 			int count=client.read(buffer);//从通道中读入缓冲区pos=N,lim=1024
 			if(count==-1){
-				Debug.debug("退出"+client.socket().getRemoteSocketAddress());
+				LogUtil.logger.info("退出"+client.socket().getRemoteSocketAddress());
 				client.close();
 			}else if(buffer.position()==0){
 				return;//如果BUFFER为空，则返回
@@ -131,14 +131,14 @@ public class ServerThread implements Runnable {
 			}*/
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Debug.error("从客户端Channel读入缓冲区出现异常。"+e.getMessage(), e);
+			LogUtil.logger.error("从客户端Channel读入缓冲区出现异常。"+e.getMessage(), e);
 			try {
 				client.close();
 				//msgCenter.allTanks.re
-				Debug.debug("退出"+client.socket().getRemoteSocketAddress());
+				LogUtil.logger.warn("退出"+client.socket().getRemoteSocketAddress());
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				Debug.error("客户端退出时出现异常", e1);
+				LogUtil.logger.error("客户端退出时出现异常", e1);
 				e1.printStackTrace();
 			}
 		}finally{
@@ -157,11 +157,11 @@ public class ServerThread implements Runnable {
 			if(clientChannel!=null){
 				clientChannel.configureBlocking(false);
 				clientChannel.register(selector, SelectionKey.OP_READ);
-				Debug.debug("加入:"+clientChannel.socket().getRemoteSocketAddress());
+				LogUtil.logger.info("加入:"+clientChannel.socket().getRemoteSocketAddress());
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Debug.error("服务器游戏线程通道在接受连接时出错", e);
+			LogUtil.logger.error("服务器游戏线程通道在接受连接时出错", e);
 			e.printStackTrace();
 		}
 	}
