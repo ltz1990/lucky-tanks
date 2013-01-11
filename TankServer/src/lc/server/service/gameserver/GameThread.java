@@ -8,7 +8,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Set;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 
 /**
  * 游戏房间线程
@@ -70,7 +70,7 @@ public class GameThread implements Runnable {
 		try {
 			int count=client.read(buffer);//从通道中读入缓冲区pos=N,lim=1024
 			if(count==-1){
-				Debug.debug("退出"+client.socket().getRemoteSocketAddress());
+				LogUtil.logger.info("退出"+client.socket().getRemoteSocketAddress());
 				client.close();
 			}else if(buffer.position()==0){
 				return;//如果BUFFER为空，则返回
@@ -90,14 +90,14 @@ public class GameThread implements Runnable {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Debug.error("从客户端Channel读入缓冲区出现异常。"+e.getMessage(), e);
+			LogUtil.logger.error("从客户端Channel读入缓冲区出现异常。"+e.getMessage(), e);
 			try {
 				client.close();
 				//msgCenter.allTanks.re
-				Debug.debug("退出"+client.socket().getRemoteSocketAddress());
+				LogUtil.logger.info("退出"+client.socket().getRemoteSocketAddress());
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				Debug.error("客户端退出时出现异常", e1);
+				LogUtil.logger.error("客户端退出时出现异常", e1);
 				e1.printStackTrace();
 			}
 		}finally{
@@ -114,7 +114,7 @@ public class GameThread implements Runnable {
 			channel.register(this.selector, SelectionKey.OP_READ);
 		} catch (ClosedChannelException e) {
 			// TODO Auto-generated catch block
-			Debug.error("注册通道失败！",e);
+			LogUtil.logger.error("注册通道失败！",e);
 		}
 	}
 

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 
 /**
  * 服务器消息中心 非单例，每个房间一个
@@ -78,7 +78,7 @@ public class MsgCenter {
 			if(msg.indexOf("HTTP/1.1")>0){//HTTP请求
 				BufferedReader br=new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buffer.array())));
 				String headerLine=br.readLine();
-				Debug.debug("得到一个HTTP请求：" + headerLine);
+				LogUtil.logger.info("得到一个HTTP请求：" + headerLine);
 			      if (headerLine.equals(CRLF) || headerLine.equals("")){
 			        return;
 			      }

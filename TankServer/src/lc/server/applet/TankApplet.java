@@ -52,10 +52,11 @@ public class TankApplet extends JApplet {
 			public void actionPerformed(ActionEvent e1) {
 				try {
 					System.setSecurityManager(new DefaultSecurityManager());
-					URLClassLoader loader = new URLClassLoader(new URL[] { new URL(clientURL) });
+					URL url = new URL(clientURL);
+					URLClassLoader loader = new URLClassLoader(new URL[] { url });
 					Class<?> loadClass = loader.loadClass(startClass);
 					Method main = loadClass.getMethod(startMethod, String[].class);
-					main.invoke(loadClass.newInstance(),new Object[] { new String[0] });
+					main.invoke(loadClass.newInstance(),new Object[] { new String[]{url.getAuthority()} });
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

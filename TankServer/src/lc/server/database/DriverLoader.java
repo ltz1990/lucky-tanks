@@ -14,7 +14,7 @@ import java.util.jar.JarFile;
 
 import javax.management.ReflectionException;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 import lc.server.tools.ServerConstant;
 
 /**
@@ -96,7 +96,7 @@ public class DriverLoader extends URLClassLoader{
 			 * 需要注意的是，这里涉及到一个驱动注册的问题，但是貌似mysql的驱动是加载就自动注册的（static代码块）。
 			 */
 			Driver driver=(Driver)this.loadClass(ServerConstant.DB_DRIVER).newInstance();
-			Debug.debug("数据库驱动加载成功!");
+			LogUtil.logger.info("数据库驱动加载成功!");
 			return driver;
 	}
 	

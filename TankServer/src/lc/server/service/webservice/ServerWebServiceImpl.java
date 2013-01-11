@@ -2,7 +2,7 @@ package lc.server.service.webservice;
 
 import javax.jws.WebService;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 
 /**
  * webservice实现类，依照接口的定义来发布公开的方法
@@ -18,7 +18,7 @@ public class ServerWebServiceImpl implements ServerWebService{
 		// TODO Auto-generated method stub.
 		MsgEntry msg=new MsgEntry();
 		msg.result=false;
-		Debug.debug("登陆");
+		LogUtil.logger.info("登陆");
 		return msg;
 	}
 	@Override
@@ -27,7 +27,7 @@ public class ServerWebServiceImpl implements ServerWebService{
 		MsgEntry msg=new MsgEntry();
 		msg.result=true;
 		msg.resultMessage="成功";
-		Debug.debug("注册");
+		LogUtil.logger.info("注册");
 		return msg;
 	}	
 }

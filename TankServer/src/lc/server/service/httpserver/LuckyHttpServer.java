@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.ArrayList;
 
-import lc.server.log.Debug;
+import lc.server.log.LogUtil;
 import lc.server.tools.ServerConstant;
 
 import com.sun.net.httpserver.HttpContext;
@@ -72,7 +72,7 @@ public class LuckyHttpServer{
 	 */
 	public void start(){		
 		server.start();
-		Debug.debug("http服务启动完成");
+		LogUtil.logger.info("http服务启动完成");
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class LuckyHttpServer{
 			if(ex.getHttpContext()!=getWebServiceContext()){//非webservice请求
 				if("GET".equals(ex.getRequestMethod())){//如果是GET请求
 					URI requestURI = ex.getRequestURI();//请求的路径
-					Debug.debug("HTTP请求,来自:"+ex.getRemoteAddress()+" "+requestURI);
+					LogUtil.logger.info("HTTP请求,来自:"+ex.getRemoteAddress()+" "+requestURI);
 					if("/".equals(requestURI.getPath())){//直接访问域名
 						ex.getResponseHeaders().set("Location", "./index.html");
 						//页面重定向，注意这里是301 不是 300
@@ -112,7 +112,7 @@ public class LuckyHttpServer{
 						responseBody.write(bf);
 						responseBody.close();
 					}else{
-						Debug.debug("找不到请求文件:"+file.getName());
+						LogUtil.logger.info("找不到请求文件:"+file.getName());
 						File file404 = new File(".\\error404.html");
 						file404.exists();
 						FileInputStream fis=new FileInputStream(file404);
@@ -125,10 +125,10 @@ public class LuckyHttpServer{
 						responseBody.close();
 					}
 				}else{
-					Debug.debug("未知请求:"+ex.getRequestURI());
+					LogUtil.logger.info("未知请求:"+ex.getRequestURI());
 				}
 			}else{
-				Debug.debug("WebService请求,来自:"+ex.getRemoteAddress());
+				LogUtil.logger.info("WebService请求,来自:"+ex.getRemoteAddress());
 			}
 		}
 		
