@@ -33,22 +33,46 @@ public class Debug {
 		System.out.println(obj);
 	}
 	
+	/**
+	 * 打开消息提示框
+	 * @author LUCKY 2013-1-11
+	 * @param obj
+	 */
 	public static void showMessageDialog(Object obj){
+		LoadingDialog.getInstance().closeDialog();//关闭LOADING
 		System.out.println(obj);
 		JOptionPane.showInternalMessageDialog(MainFrame.getInstance().getContentPane(), obj, "消息", JOptionPane.INFORMATION_MESSAGE, null);
 	}
 	
 	/**
-	 * 输出错误信息
+	 * 输出错误信息,弹错误框
+	 * @param obj
+	 * @param e
+	 */
+	public static void errorDialog(Object obj,Exception e){
+		if(LoadingDialog.getInstance().isShowing())
+		LoadingDialog.getInstance().closeDialog();//关闭LOADING
+		String errorMsg = e==null?"":e.getMessage();
+		String msg = obj+"\n"+errorMsg;
+		JOptionPane.showInternalMessageDialog(MainFrame.getInstance().getContentPane(), msg,"提示",JOptionPane.ERROR_MESSAGE,errorIcon);
+		System.out.println(getNow()+obj+errorMsg);
+		if(e!=null){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 输出错误信息 不弹框
+	 * @author LUCKY 2013-1-12
 	 * @param obj
 	 * @param e
 	 */
 	public static void error(Object obj,Exception e){
-		LoadingDialog.getInstance().closeDialog();//关闭LOADING
-		String msg = obj+"\n"+e.getMessage();
-		JOptionPane.showInternalMessageDialog(MainFrame.getInstance().getContentPane(), msg,"提示",JOptionPane.ERROR_MESSAGE,errorIcon);
-		System.out.println(getNow()+obj+e.getMessage());
-		e.printStackTrace();
+		String errorMsg = e==null?"":e.getMessage();
+		System.out.println(getNow()+obj+errorMsg);
+		if(e!=null){
+			e.printStackTrace();
+		}
 	}
 	
 	/**

@@ -96,7 +96,7 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 		 * 此时就手动唤醒主线程，然后再次调用关闭窗口方法来关闭LOADING的模态，防止主线程无限WAITING。
 		 */
 		int count=0;
-		while(!Thread.State.RUNNABLE.equals(popUpThread.getState())){
+		while(popUpThread!=null&&!Thread.State.RUNNABLE.equals(popUpThread.getState())){
 			try {
 				Thread.sleep(100);
 				if(count++==10){//如果三秒钟都没有结束模态，则重新调用 模态停止方法
@@ -143,7 +143,7 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 	 * @see Container#stopLWModal()
 	 * @param isModal 是否启用模态
 	 */
-	private void setLWModal(boolean isModal) {
+	private void setLWModal(boolean isModal) {		
 		String methodName;
 		if(isModal){
 			methodName=START_LWMODAL;
@@ -154,10 +154,16 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 		}
 		try {
             Object obj;
-            Debug.debug(methodName);
 			obj = AccessController.doPrivileged(new ModalPrivilegedAction(Container.class, methodName));//启用特权
             if (obj != null) {
-            	((Method)obj).invoke(this, (Object[])null);
+            	Debug.debug(this.getClass().getName()+"开始:"+methodName);
+            	Debug.debug("MODELTHREAD:"+popUpThread);
+            	if(START_LWMODAL.equals(methodName)){
+            		((Method)obj).invoke(this, (Object[])null);
+            	}else{
+            		((Method)obj).invoke(this, (Object[])null);
+            	}
+            	Debug.debug(this.getClass().getName()+"结束:"+methodName);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

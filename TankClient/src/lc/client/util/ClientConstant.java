@@ -43,6 +43,8 @@ public class ClientConstant {
 	
 	public static String SERVER_ADDRESS="127.0.0.1";
 	public static int SERVER_PORT=9999;
+	public static String WEB_SERVER;//Õ¯“≥µÿ÷∑
+	public static int WEB_PORT=0;
 	
 	public static int BTN_WIDTH=55;//∞¥≈•
 	public static int BTN_HEIGHT=25;
@@ -79,8 +81,13 @@ public class ClientConstant {
 				loadKeySetting();
 			}else{
 				new File(propFile.getParent()).mkdirs();
-				prop.put("SERVER_ADDRESS", SERVER_ADDRESS);
-				prop.put("SERVER_PORT", Integer.toString(SERVER_PORT));
+				if(WEB_SERVER!=null&&WEB_PORT!=0){
+					prop.put("SERVER_ADDRESS", WEB_SERVER);
+					prop.put("SERVER_PORT", Integer.toString(WEB_PORT));
+				}else{
+					prop.put("SERVER_ADDRESS", SERVER_ADDRESS);
+					prop.put("SERVER_PORT", Integer.toString(SERVER_PORT));
+				}
 				prop.put("KEY_UP", Integer.toString(KEY_UP));
 				prop.put("KEY_DOWN", Integer.toString(KEY_DOWN));
 				prop.put("KEY_LEFT", Integer.toString(KEY_LEFT));

@@ -37,6 +37,10 @@ public class LOkCancelButton extends JComponent implements ILComponent,AncestorL
 		okBtn.addAncestorListener(this);//当组件被添加到父对象中触发
 		comps=new Component[]{okBtn,cancelBtn};
 	}
+	
+	public JButton getOkButton(){
+		return okBtn;
+	}
 
 	/**
 	 * 获得控件内部的子控件
