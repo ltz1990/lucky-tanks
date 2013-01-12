@@ -1,6 +1,8 @@
 package lc.client.start;
 
 import java.awt.Font;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -17,6 +19,16 @@ import lc.client.util.FontSetting;
  */
 public class ClientStart {
 	public static void main(String [] args){
+		if(args.length>0){
+			try {
+				URL url=new URL("http://"+args[0]);//不然无法初始化URL
+				ClientConstant.WEB_SERVER=url.getHost();
+				ClientConstant.WEB_PORT=url.getPort()+1;
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		ClientStart start=new ClientStart();
 		//appletInit();
 		start.setLookAndFeel();	

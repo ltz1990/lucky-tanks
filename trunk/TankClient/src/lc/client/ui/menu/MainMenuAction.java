@@ -23,6 +23,8 @@ import lc.client.ui.dialog.GameCreateDialog;
 import lc.client.ui.dialog.GameJoinDialog;
 import lc.client.ui.dialog.KeySettingDialog;
 import lc.client.ui.dialog.LoadingDialog;
+import lc.client.ui.dialog.LoginDialog;
+import lc.client.ui.dialog.RegisterDialog;
 import lc.client.ui.dialog.ServerConfigDialog;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.panel.HomePanel;
@@ -34,12 +36,16 @@ public class MainMenuAction {
 
 	/**
 	 * 登陆事件
+	 * 用webservice登陆，
+	 * 可以在创建加入游戏的时候建立NIO连接，然后传本地channel的相关数据过去，主要是IP和端口
+	 * 然后在服务端匹配登陆用户名和本地IP端口
 	 */
 	@SuppressWarnings("deprecation")
 	protected static void onLogin(){
-		final String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"起个名字");
-		if(name==null) return;
-		LoadingTask task=new LoadingTask() {			
+		LoginDialog.getInstance().popUp();
+		//final String name=JOptionPane.showInternalInputDialog(MainFrame.getInstance().getContentPane(),"起个名字");
+		//if(name==null) return;
+		/*LoadingTask task=new LoadingTask() {			
 			public void run() throws Exception {
 				TankFactory factory = TankFactory.getInstance();
 				factory.createTank(name, ClientConstant.USER);
@@ -64,24 +70,17 @@ public class MainMenuAction {
 		};
 		if(LoadingDialog.getInstance().popUpMessageDialog(task)){
 			MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
-		}
+		}*/
 	}
 	
 	/**
 	 * 注册
 	 */
 	protected static void onRegister(){
-		String abc=RemoteServiceProxy.getInstance().register("a","b").getResultMessage();
-		Debug.debug("远程方法调用结束 "+abc);
+		RegisterDialog.getInstance().popUp();
+		//String abc=RemoteServiceProxy.getInstance().register("a","b").getResultMessage();
+		//Debug.debug("远程方法调用结束:"+abc);
 	}
-	
-	public static JDesktopPane getDesktopPaneForComponent(Component parentComponent) {
-        if(parentComponent == null)
-            return null;
-        if(parentComponent instanceof JDesktopPane)
-            return (JDesktopPane)parentComponent;
-        return getDesktopPaneForComponent(parentComponent.getParent());
-    }
 	
 	/**
 	 * 退出
