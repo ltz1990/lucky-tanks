@@ -66,7 +66,7 @@ public class DataAcceptThread implements Runnable{
 					}
 				}
 			} catch (IOException e) {
-				Debug.error("服务器断开", e);
+				Debug.errorDialog("服务器断开", e);
 				NetConnection.isRun=false;
 				threadFinished();
 				MainMenu.getInstance().setState(LMenuItem.NO_CONN);
@@ -75,7 +75,7 @@ public class DataAcceptThread implements Runnable{
 				e.printStackTrace();
 				break;
 			} catch (ClosedSelectorException e){
-				Debug.error("选择器关闭", e);
+				Debug.errorDialog("选择器关闭", e);
 				break;
 			}finally{
 				buffer.clear();//清空BUFFER
