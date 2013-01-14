@@ -2,11 +2,16 @@
 	<head>
 		<title>坦克大战</title>
 	</head>
-	<body>
-		<applet code="lc.server.applet.TankApplet.class" archive="TankApplet.jar" width=120 height=40 >
-			<PARAM NAME=clientURL VALUE="http://localhost/TANKCLIENT.JAR">
-			<PARAM NAME=startClass VALUE="lc.client.start.ClientStart">
-			<PARAM NAME=startMethod VALUE="main">
-		</applet>
+	<script language="javascript" type="text/javascript">
+	/*用JS创建APPLET是为了URL参数*/
+	function bodyOnLoad(){
+		document.body.innerHTML="<applet id='tankclient' code='lc.server.applet.TankApplet.class' archive='TankApplet.jar' width=120 height=40>\n"
+		+"<PARAM NAME=clientURL VALUE='http://"+window.location.host+"/TANKCLIENT.JAR'>"
+		+"<PARAM NAME=startClass VALUE='lc.client.start.ClientStart'>"
+		+"<PARAM NAME=startMethod VALUE='main'>"
+		+"</applet>";
+	}
+	</script>
+	<body onload="bodyOnLoad();">
 	</body>
 </html>
