@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
 import lc.server.log.LogUtil;
 import lc.server.tools.ServerConstant;
@@ -49,7 +50,7 @@ public class LuckyHttpServer{
 			 */
 			server.createContext("/META-INF");
 			server.createContext("/", new TankHttpHandle());//为所有访问添加事件管理器
-			server.setExecutor(null);
+			server.setExecutor(Executors.newCachedThreadPool());//创建一个线程池
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

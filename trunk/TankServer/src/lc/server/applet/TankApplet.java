@@ -56,6 +56,7 @@ public class TankApplet extends JApplet {
 					URLClassLoader loader = new URLClassLoader(new URL[] { url });
 					Class<?> loadClass = loader.loadClass(startClass);
 					Method main = loadClass.getMethod(startMethod, String[].class);
+					//启动客户端，传入URL授权部分作为默认服务器路径
 					main.invoke(loadClass.newInstance(),new Object[] { new String[]{url.getAuthority()} });
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
