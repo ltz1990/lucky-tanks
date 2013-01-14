@@ -44,20 +44,6 @@ public class LoginDialog extends LDialog{
 		}
 		return loginDialog;
 	}
-
-	/**
-	 * °´Å¥¶¯×÷¼àÌý
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e){
-		String actionCommand = e.getActionCommand();
-		if("OK".equals(actionCommand)){
-			onOkBtn();
-			//this.closeDialog();
-		}else if("CANCEL".equals(actionCommand)){
-			this.closeDialog();
-		}
-	}
 	
 	@Override
 	public void onOkBtn() {

@@ -26,7 +26,7 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 	private static final long serialVersionUID = 1L;
 	private static final String START_LWMODAL="startLWModal";
 	private static final String STOP_LWMODAL="stopLWModal";
-	
+	private boolean isModal;//是否模态
 	private Thread popUpThread;
 
 	/**
@@ -36,13 +36,25 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 	 * @param dialogWidht
 	 * @param dialogHeight
 	 */
-	public LDialog(JFrame jframe,String title,int dialogWidht,int dialogHeight){
+	public LDialog(JFrame jframe,String title,int dialogWidth,int dialogHeight){
+		this(jframe,title,dialogWidth,dialogHeight,true);
+	}
+	
+	/**
+	 * 私有DIALOG
+	 * @param jframe
+	 * @param title
+	 * @param dialogWidht
+	 * @param dialogHeight
+	 */
+	public LDialog(JFrame jframe,String title,int dialogWidht,int dialogHeight,boolean isModal){
 		super(title,false,false);
 		this.setTitle(title);
 		this.setLocation((jframe.getSize().width-dialogWidht)/2, (jframe.getSize().height-dialogHeight)/2);
 		this.setSize(dialogWidht,dialogHeight);
 		this.setResizable(false);
 		this.setLayout(null);
+		this.isModal=isModal;
 		jframe.getLayeredPane().add(this,JLayeredPane.POPUP_LAYER);//添加到这一层就相当于占满整个窗口
 	}
 	
@@ -79,7 +91,9 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 		popUpThread=Thread.currentThread();//上次打开它的线程（用来检测模态是否结束）
 		onPopUp();
 		this.setVisible(true);
-		setLWModal(true);//启动模态
+		if(isModal){
+			setLWModal(true);//启动模态
+		}
 	}
 
 	/**
@@ -87,27 +101,30 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 	 */
 	public void closeDialog(){
 		//某些情况下可能会出现唤醒失败的问题！
-		setLWModal(false);//关闭模态
-		/**
-		 * 由于关闭模态的时候进行的是线程相关的操作
-		 * 所以有可能出现阻塞，死锁等状况导致模态在很长时间里无法结束，造成主线程无限WAITING，主界面无法操作。
-		 * 所以在这里增加逻辑，每0.1秒监测一下主线程是不是在运行态，如果没有则继续监测
-		 * 如果监测了30次（3秒钟）主线程还没有重新启动运行，则认为模态关闭失败。
-		 * 此时就手动唤醒主线程，然后再次调用关闭窗口方法来关闭LOADING的模态，防止主线程无限WAITING。
-		 */
-		int count=0;
-		while(popUpThread!=null&&!Thread.State.RUNNABLE.equals(popUpThread.getState())){
-			try {
-				Thread.sleep(100);
-				if(count++==10){//如果三秒钟都没有结束模态，则重新调用 模态停止方法
-					synchronized(popUpThread){
-						popUpThread.notify();
+		if (isModal) {
+			setLWModal(false);// 关闭模态
+			/**
+			 * 由于关闭模态的时候进行的是线程相关的操作
+			 * 所以有可能出现阻塞，死锁等状况导致模态在很长时间里无法结束，造成主线程无限WAITING，主界面无法操作。
+			 * 所以在这里增加逻辑，每0.1秒监测一下主线程是不是在运行态，如果没有则继续监测
+			 * 如果监测了30次（3秒钟）主线程还没有重新启动运行，则认为模态关闭失败。
+			 * 此时就手动唤醒主线程，然后再次调用关闭窗口方法来关闭LOADING的模态，防止主线程无限WAITING。
+			 */
+			int count = 0;
+			while (popUpThread != null
+					&& !Thread.State.RUNNABLE.equals(popUpThread.getState())) {
+				try {
+					Thread.sleep(100);
+					if (count++ == 10) {// 如果三秒钟都没有结束模态，则重新调用 模态停止方法
+						synchronized (popUpThread) {
+							popUpThread.notify();
+						}
+						closeDialog();
 					}
-					closeDialog();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		this.setVisible(false);
