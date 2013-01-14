@@ -14,12 +14,13 @@ import lc.server.tools.ServerConstant;
  */
 public class DBConnection {
 	static Driver driver;
+	static Properties prop;
 	@SuppressWarnings("finally")
 	public static Connection getConnection(){
 		Connection conn=null;
-		try {
-			Properties prop = new Properties();
-			if(driver==null){		
+		try {			 
+			if(driver==null){	
+				prop=new Properties();
 				prop.put("user",ServerConstant.DB_USER);
 				prop.put("password",ServerConstant.DB_PASSWORD);
 				driver=DriverLoader.getInstance().loadDatabaseDriver();
