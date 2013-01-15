@@ -113,6 +113,7 @@ public class MainMenuAction {
 		if(state==0){
 		//JOptionPane.showConfirmDialog(MainFrame.getInstance().getContentPane(), "123");
 			GameController.exitGame();
+			NetConnection.disConnect();
 		}
 	}
 	
