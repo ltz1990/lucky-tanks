@@ -77,9 +77,7 @@ public class ServerThread implements Runnable {
 			try {
 				selector.select();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				LogUtil.logger.error("选择器在调select()方法时出错", e);
-				e.printStackTrace();
 			}
 			Set<SelectionKey> keys=selector.selectedKeys();//获得活动链接
 			activeSockets=keys.size();
@@ -90,59 +88,8 @@ public class ServerThread implements Runnable {
 				if(key.isAcceptable()){
 					doAcceptEvent(key);
 					continue;
-				}else if(key.isReadable()){
-					doReadEvent(key);
-					continue;
-				}else if(key.isWritable()){
-					doWriteEvent(key);
-					continue;
 				}
 			}
-		}
-	}
-
-	/**
-	 * 服务器读取通道事件
-	 * 处理多播
-	 * @param key
-	 */
-	private void doReadEvent(SelectionKey key) {
-		// TODO Auto-generated method stub
-		SocketChannel client=(SocketChannel)key.channel();//一个客户端通道
-		try {
-			int count=client.read(buffer);//从通道中读入缓冲区pos=N,lim=1024
-			if(count==-1){
-				LogUtil.logger.info("退出"+client.socket().getRemoteSocketAddress());
-				client.close();
-			}else if(buffer.position()==0){
-				return;//如果BUFFER为空，则返回
-			}
-			buffer.flip();//pos=0,lim=N	
-			msgCenter.msgProcess(buffer,client);
-			//System.out.println(buffer);
-			/*for(SelectionKey other:selector.selectedKeys()){//多播 key是所有的，包括cancel的 。selectionKey是活动的				
-				if(!other.isValid()||other==key||other.isAcceptable()){//如果是当前客户端或者如果是服务器通道则不可读
-					continue;
-				}
-				SocketChannel otherChannel=(SocketChannel)other.channel();
-				otherChannel.write(buffer);
-				//System.out.println(buffer);
-				buffer.position(0);//重置BUFFER游标
-			}*/
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			LogUtil.logger.error("从客户端Channel读入缓冲区出现异常。"+e.getMessage(), e);
-			try {
-				client.close();
-				//msgCenter.allTanks.re
-				LogUtil.logger.warn("退出"+client.socket().getRemoteSocketAddress());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				LogUtil.logger.error("客户端退出时出现异常", e1);
-				e1.printStackTrace();
-			}
-		}finally{
-			buffer.clear();
 		}
 	}
 
@@ -156,19 +103,12 @@ public class ServerThread implements Runnable {
 			SocketChannel clientChannel=serverSocketChannel.accept();
 			if(clientChannel!=null){
 				clientChannel.configureBlocking(false);
-				clientChannel.register(selector, SelectionKey.OP_READ);
-				LogUtil.logger.info("加入:"+clientChannel.socket().getRemoteSocketAddress());
+				//匹配WEBSERVICE发送来的，关于此客户端通道的详细信息
+				GameCtrlCenter.getInstance().searchAnotherConnInfo(clientChannel.socket().getRemoteSocketAddress().toString(), clientChannel);	
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			LogUtil.logger.error("服务器游戏线程通道在接受连接时出错", e);
-			e.printStackTrace();
 		}
-	}
-	
-	private void doWriteEvent(SelectionKey key) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	/**
@@ -177,29 +117,5 @@ public class ServerThread implements Runnable {
 	 */
 	public int getActiveSockets(){
 		return this.activeSockets;
-	}
-	
-	public synchronized void msgProcess(ByteBuffer buffer, SocketChannel client) {
-		try {
-			String msg = null;
-			msg = Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
-			buffer.position(0);//必须重置
-			int endIndex = 0;
-			int index = 0;
-			while ((index = msg.indexOf('[', endIndex)) != -1) {
-				endIndex = msg.indexOf(']', index);
-				String[] strs = msg.substring(index + 1, endIndex).split(",");
-				if (MsgCenter.TYPE_JOIN.equals(strs[0])) {// 有新连接请求加入游戏
-					// 加入成功			
-					
-				}
-			}
-		} catch (CharacterCodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
