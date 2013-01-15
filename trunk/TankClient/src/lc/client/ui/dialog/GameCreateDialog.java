@@ -1,11 +1,18 @@
 package lc.client.ui.dialog;
 
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.io.IOException;
+import java.net.SocketAddress;
 
 import javax.swing.JFrame;
 
+import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
 import lc.client.core.net.MsgCenter;
+import lc.client.core.net.NetConnection;
 import lc.client.ui.components.LComboBox;
 import lc.client.ui.components.LDialog;
 import lc.client.ui.components.LMenuItem;
@@ -14,7 +21,10 @@ import lc.client.ui.components.LTextField;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.menu.MainMenu;
 import lc.client.util.ClientConstant;
+import lc.client.util.Debug;
 import lc.client.util.FontSetting;
+import lc.client.webservice.RemoteServiceProxy;
+import lc.client.webservice.wscode.GameHouse;
 
 /**
  * 创建游戏窗口
@@ -33,7 +43,7 @@ public class GameCreateDialog extends LDialog {
 
 	private GameCreateDialog(JFrame jframe, String title, int dialogWidht,
 			int dialogHeight) {
-		super(jframe, title, dialogWidht, dialogHeight);
+		super(jframe, title, dialogWidht, dialogHeight,false);//暂时设置为非模态
 		this.add(new LOkCancelButton());
 		gameId=(LTextField) this.add(new LTextField("房间名称",5,30));
 		gameType=(LComboBox)this.add(new LComboBox("游戏模式",5,60));
@@ -62,7 +72,26 @@ public class GameCreateDialog extends LDialog {
 	@Override
 	public void onOkBtn() {
 		// TODO Auto-generated method stub
-		MsgCenter.addCreateGameMsg(this.gameId.getValue(), TankFactory.getInstance().getUserTank().getName(), this.gameType.getSelectedValue(), this.playerNum.getSelectedValue());
+		try {
+			NetConnection.openConnect();
+			SocketAddress address=NetConnection.getSocketChannel().socket().getLocalSocketAddress();
+			GameHouse house=new GameHouse();
+			house.setCreator("liutianzhi");
+			house.setGameType("test");
+			house.setName("我的房间");
+			house.setPlayerCount("10");
+			RemoteServiceProxy.getInstance().createGame(house,address.toString());
+			TankFactory factory = TankFactory.getInstance();
+			factory.createTank("猩猩是傻逼", ClientConstant.USER);
+			GameController.startGame();
+			NetConnection.startNetThread();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		MainMenu.getInstance().setState(LMenuItem.IN_GAME);
 	}
 
@@ -71,7 +100,4 @@ public class GameCreateDialog extends LDialog {
 		// TODO Auto-generated method stub
 
 	}
-	
-	
-
 }
