@@ -1,11 +1,14 @@
 package lc.server.service.webservice;
 
+import java.net.SocketAddress;
 import java.sql.SQLException;
 
 import javax.jws.WebService;
 
 import lc.server.database.dao.UserDAO;
+import lc.server.gamecomp.GameHouse;
 import lc.server.log.LogUtil;
+import lc.server.service.gameserver.GameCtrlCenter;
 
 /**
  * webservice实现类，依照接口的定义来发布公开的方法
@@ -24,18 +27,18 @@ public class ServerWebServiceImpl implements ServerWebService{
 		try {
 			if(dao.login(username, password)){
 				msg=new MsgEntry(true, "登陆成功!");
-				LogUtil.logger.info(username+"登陆成功");
+				LogUtil.logger.info("[登陆成功]"+username);
 			}else{
 				msg=new MsgEntry(false,"登陆失败!用户名密码错误!");
-				LogUtil.logger.warn(username+"登陆失败，用户名密码错误");
+				LogUtil.logger.warn("[登陆失败]用户名密码错误"+username);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			msg=new MsgEntry(false, "登陆过程中出现了一个数据库异常!");
-			LogUtil.logger.error(username+"登陆出现异常!",e);
+			LogUtil.logger.error("[登陆出现异常]"+username,e);
 		} catch (Exception e) {
 			msg=new MsgEntry(false, "登陆出现未知异常!");
-			LogUtil.logger.error(username+"登陆出现未知异常!",e);
+			LogUtil.logger.error("[登陆出现未知异常]"+username,e);
 		} finally{
 			dao.close();
 		}
@@ -65,7 +68,15 @@ public class ServerWebServiceImpl implements ServerWebService{
 			return msg;
 		} finally{
 			dao.close();	
-			
 		}
+	}
+	@Override
+	public MsgEntry createGame(GameHouse house,String address) {
+		// TODO Auto-generated method stub
+		MsgEntry msg=new MsgEntry(true, "创建成功");
+		GameCtrlCenter center = GameCtrlCenter.getInstance();
+		String houseId=center.createGameHouse(house);
+		center.searchAnotherConnInfo(address, houseId);
+		return msg;
 	}	
 }

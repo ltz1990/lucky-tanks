@@ -29,6 +29,10 @@ public class ServerConstant {
 	public static String SQL_USER_INSERT;//用户插入SQL
 	public static String SQL_USER_SELECT;//用户查询SQL
 	
+	/**游戏类型**/
+	public static final int GAMETYPE_FLAG=0;//抢旗
+	public static final int GAMETYPE_FIGHT=1;//对战
+	
 	
 	/**
 	 * 加载服务器配置
