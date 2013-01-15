@@ -35,6 +35,14 @@ public class MsgEntry {
 
     protected boolean result;
     protected String resultMessage;
+    
+    public MsgEntry(){
+    	
+    }
+    public MsgEntry(boolean result,String resultMessage){
+    	this.result=result;
+    	this.resultMessage=resultMessage;
+    }
 
     /**
      * Gets the value of the result property.

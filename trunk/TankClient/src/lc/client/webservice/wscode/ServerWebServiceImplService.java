@@ -1,18 +1,14 @@
 
 package lc.client.webservice.wscode;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
-
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceFeature;
-
-import lc.client.util.ClientConstant;
 
 
 /**
@@ -21,7 +17,7 @@ import lc.client.util.ClientConstant;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "ServerWebServiceImplService", targetNamespace = "http://webservice.service.server.lc/", wsdlLocation = "http://localhost/WebService?wsdl")
+@WebServiceClient(name = "ServerWebServiceImplService", targetNamespace = "http://webservice.service.server.lc/", wsdlLocation = "http://localhost:8080/WebService?wsdl")
 public class ServerWebServiceImplService
     extends Service
 {
@@ -33,22 +29,16 @@ public class ServerWebServiceImplService
         URL url = null;
         try {
             URL baseUrl;
-            /**
-             * 这里取的是相对路径，生成XML缓存，但是从applet启动时取不到，改为user.dir
-             */
-            //baseUrl = lc.client.webservice.wscode.ServerWebServiceImplService.class.getResource(".");
-           //baseUrl=new URL(ClientConstant.USER_PATH); 
-            baseUrl=new File(ClientConstant.USER_PATH).toURI().toURL();
-            url = new URL(baseUrl, "http://localhost/WebService?wsdl");
+            baseUrl = lc.client.webservice.wscode.ServerWebServiceImplService.class.getResource(".");
+            url = new URL(baseUrl, "http://localhost:8080/WebService?wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://localhost/WebService?wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://localhost:8080/WebService?wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         SERVERWEBSERVICEIMPLSERVICE_WSDL_LOCATION = url;
     }
 
     public ServerWebServiceImplService(URL wsdlLocation, QName serviceName) {
-    	//父类中用到了/META-INF/services/javax.xml.ws.spi.Provider等文件，应在服务端返回找不到文件
         super(wsdlLocation, serviceName);
     }
 
