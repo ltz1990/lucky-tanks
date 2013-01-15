@@ -20,6 +20,7 @@ public class GameThread implements Runnable {
 	private Thread thread;
 	private Selector selector;
 	private MsgCenter msgCenter;
+	private Object lock=new Object();//用来锁定selector,注册用
 	
 	private int activeSockets=0;
 	private ByteBuffer buffer;
@@ -27,6 +28,13 @@ public class GameThread implements Runnable {
 
 	protected GameThread() {
 		msgCenter=new MsgCenter();
+		buffer=ByteBuffer.allocate(BUFFER_SIZE);//一个新的缓冲区 POS=0，LIM=1024
+		try {
+			selector = Selector.open();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -43,22 +51,25 @@ public class GameThread implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			buffer=ByteBuffer.allocate(BUFFER_SIZE);//一个新的缓冲区 POS=0，LIM=1024
-			selector = Selector.open();
 			while (true) {
-				Set<SelectionKey> keys=selector.selectedKeys();//获得活动链接
-				activeSockets=keys.size();
-				if(activeSockets==0){
-					continue;//如果活动链接数为0，则继续等待
+				selector.select(1000);//最多等待2秒钟一个轮询（防止注册一直等待)
+				Set<SelectionKey> keys=null;
+				synchronized(lock){//此锁的主要目的是当SELECTOR激活之后，将其拦住先完成注册
+					keys= selector.selectedKeys();// 获得活动链接
 				}
-				for(SelectionKey key:keys){
-					if(key.isReadable()){
+				activeSockets = keys.size();
+				//LogUtil.logger.info("游戏线程走");
+				if (activeSockets == 0) {
+					continue;// 如果活动链接数为0，则继续等待
+				}
+				for (SelectionKey key : keys) {
+					if (key.isReadable()) {
 						doReadEvent(key);
 						continue;
 					}
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -109,12 +120,15 @@ public class GameThread implements Runnable {
 	 * 注册通道到当前房间
 	 * @param channel
 	 */
-	public void register(SocketChannel channel){
+	public void register(SocketChannel channel) {
 		try {
-			channel.register(this.selector, SelectionKey.OP_READ);
+			synchronized (lock) {				
+				selector.wakeup();// 需要唤醒，不然selector阻塞的时候无法注册
+				channel.register(this.selector, SelectionKey.OP_READ);
+			}
 		} catch (ClosedChannelException e) {
 			// TODO Auto-generated catch block
-			LogUtil.logger.error("注册通道失败！",e);
+			LogUtil.logger.error("注册通道失败！", e);
 		}
 	}
 
