@@ -1,6 +1,10 @@
 package lc.server.service.webservice;
 
+import java.net.SocketAddress;
+
 import javax.jws.WebService;
+
+import lc.server.gamecomp.GameHouse;
 
 /**
  * webservice接口
@@ -25,5 +29,13 @@ public interface ServerWebService {
 	 * @return
 	 */
 	public MsgEntry register(String username,String password);
+	
+	/**
+	 * 创建游戏房间
+	 * @author LUCKY 2013-1-14
+	 * @param house
+	 * @return
+	 */
+	public MsgEntry createGame(GameHouse house,String address);
 
 }
