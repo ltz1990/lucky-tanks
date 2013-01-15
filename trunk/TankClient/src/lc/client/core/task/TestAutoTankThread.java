@@ -2,7 +2,7 @@ package lc.client.core.task;
 
 import lc.client.core.components.TankComp;
 import lc.client.core.factory.TankFactory;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * 坦克自动走线程,用来测试

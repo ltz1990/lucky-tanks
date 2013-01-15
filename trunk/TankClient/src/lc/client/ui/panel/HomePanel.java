@@ -6,7 +6,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * 首页 用来放图片

@@ -1,4 +1,4 @@
-package lc.client.util;
+package lc.client.environment;
 
 import java.awt.event.KeyEvent;
 import java.io.File;

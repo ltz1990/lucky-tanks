@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import lc.client.util.ClientConstant;
+
+import lc.client.environment.ClientConstant;
 import lc.client.util.Debug;
 
 /**

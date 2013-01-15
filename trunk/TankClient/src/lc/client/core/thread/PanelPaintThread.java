@@ -1,8 +1,8 @@
 package lc.client.core.thread;
 
 import lc.client.core.controller.GameController;
+import lc.client.environment.ClientConstant;
 import lc.client.ui.panel.GamePanel;
-import lc.client.util.ClientConstant;
 import lc.client.util.Debug;
 
 /**

@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lc.client.core.controller.GameController;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 import lc.client.util.Debug;
 /**
  * 数据发送线程

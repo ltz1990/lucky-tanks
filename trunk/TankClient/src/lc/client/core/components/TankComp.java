@@ -11,7 +11,7 @@ import java.util.Map;
 
 import lc.client.core.factory.TankFactory;
 import lc.client.core.net.MsgCenter;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * Ì¹¿Ë¿Ø¼þ

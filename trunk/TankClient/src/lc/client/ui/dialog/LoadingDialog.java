@@ -17,10 +17,10 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
 import lc.client.core.task.LoadingTask;
+import lc.client.environment.ClientConstant;
 import lc.client.start.ClientStart;
 import lc.client.ui.components.LDialog;
 import lc.client.ui.frame.MainFrame;
-import lc.client.util.ClientConstant;
 import lc.client.util.Debug;
 import lc.client.util.FontSetting;
 import lc.client.webservice.wscode.MsgEntry;

@@ -7,11 +7,11 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 
+import lc.client.environment.ClientConstant;
 import lc.client.ui.components.LDialog;
 import lc.client.ui.components.LOkCancelButton;
 import lc.client.ui.components.LTextField;
 import lc.client.ui.frame.MainFrame;
-import lc.client.util.ClientConstant;
 import lc.client.util.FontSetting;
 
 /**

@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * 确定取消按钮组，自动添加按钮到DIALOG末尾

@@ -5,10 +5,10 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import lc.client.environment.ClientConstant;
 import lc.client.ui.components.LMenuItem;
 import lc.client.ui.menu.MainMenu;
 import lc.client.ui.panel.GamePanel;
-import lc.client.util.ClientConstant;
 
 public class MainFrame extends JFrame {	
 	private static final long serialVersionUID = 1L;

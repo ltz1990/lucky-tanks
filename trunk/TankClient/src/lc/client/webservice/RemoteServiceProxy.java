@@ -12,8 +12,8 @@ import java.net.URL;
 
 import javax.xml.namespace.QName;
 
+import lc.client.environment.ClientConstant;
 import lc.client.start.ClientStart;
-import lc.client.util.ClientConstant;
 import lc.client.webservice.wscode.ServerWebService;
 import lc.client.webservice.wscode.ServerWebServiceImplService;
 

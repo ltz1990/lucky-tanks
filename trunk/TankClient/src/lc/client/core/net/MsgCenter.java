@@ -6,7 +6,7 @@ import java.util.Map;
 import lc.client.core.components.TankComp;
 import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * 消息中心
