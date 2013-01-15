@@ -49,6 +49,23 @@ public interface ServerWebService {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "createGame", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.CreateGame")
+    @ResponseWrapper(localName = "createGameResponse", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.CreateGameResponse")
+    public MsgEntry createGame(
+        @WebParam(name = "arg0", targetNamespace = "")
+        GameHouse arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns lc.client.webservice.wscode.MsgEntry
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "register", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.Register")
     @ResponseWrapper(localName = "registerResponse", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.RegisterResponse")
     public MsgEntry register(

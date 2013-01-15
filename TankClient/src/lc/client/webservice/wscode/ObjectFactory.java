@@ -26,6 +26,8 @@ public class ObjectFactory {
 
     private final static QName _Register_QNAME = new QName("http://webservice.service.server.lc/", "register");
     private final static QName _LoginResponse_QNAME = new QName("http://webservice.service.server.lc/", "loginResponse");
+    private final static QName _CreateGame_QNAME = new QName("http://webservice.service.server.lc/", "createGame");
+    private final static QName _CreateGameResponse_QNAME = new QName("http://webservice.service.server.lc/", "createGameResponse");
     private final static QName _Login_QNAME = new QName("http://webservice.service.server.lc/", "login");
     private final static QName _RegisterResponse_QNAME = new QName("http://webservice.service.server.lc/", "registerResponse");
 
@@ -37,11 +39,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Register }
+     * Create an instance of {@link LoginResponse }
      * 
      */
-    public Register createRegister() {
-        return new Register();
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateGame }
+     * 
+     */
+    public CreateGame createCreateGame() {
+        return new CreateGame();
     }
 
     /**
@@ -61,11 +71,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoginResponse }
+     * Create an instance of {@link CreateGameResponse }
      * 
      */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
+    public CreateGameResponse createCreateGameResponse() {
+        return new CreateGameResponse();
+    }
+
+    /**
+     * Create an instance of {@link Register }
+     * 
+     */
+    public Register createRegister() {
+        return new Register();
+    }
+
+    /**
+     * Create an instance of {@link GameThread }
+     * 
+     */
+    public GameThread createGameThread() {
+        return new GameThread();
+    }
+
+    /**
+     * Create an instance of {@link GameHouse }
+     * 
+     */
+    public GameHouse createGameHouse() {
+        return new GameHouse();
     }
 
     /**
@@ -92,6 +126,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://webservice.service.server.lc/", name = "loginResponse")
     public JAXBElement<LoginResponse> createLoginResponse(LoginResponse value) {
         return new JAXBElement<LoginResponse>(_LoginResponse_QNAME, LoginResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CreateGame }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservice.service.server.lc/", name = "createGame")
+    public JAXBElement<CreateGame> createCreateGame(CreateGame value) {
+        return new JAXBElement<CreateGame>(_CreateGame_QNAME, CreateGame.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CreateGameResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservice.service.server.lc/", name = "createGameResponse")
+    public JAXBElement<CreateGameResponse> createCreateGameResponse(CreateGameResponse value) {
+        return new JAXBElement<CreateGameResponse>(_CreateGameResponse_QNAME, CreateGameResponse.class, null, value);
     }
 
     /**
