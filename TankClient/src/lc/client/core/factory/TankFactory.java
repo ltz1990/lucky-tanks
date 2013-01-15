@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lc.client.core.components.TankComp;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * Ì¹¿Ë¹¤³§

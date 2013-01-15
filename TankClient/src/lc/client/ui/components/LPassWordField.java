@@ -9,7 +9,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * ´ø±êÇ©µÄÃÜÂë

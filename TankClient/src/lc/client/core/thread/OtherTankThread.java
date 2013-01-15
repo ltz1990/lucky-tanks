@@ -7,7 +7,7 @@ import lc.client.core.components.BulletComp;
 import lc.client.core.components.TankComp;
 import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 import lc.client.util.Debug;
 
 /**

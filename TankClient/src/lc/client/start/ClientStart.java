@@ -7,9 +7,9 @@ import java.net.URL;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import lc.client.environment.ClientConstant;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.panel.HomePanel;
-import lc.client.util.ClientConstant;
 import lc.client.util.FontSetting;
 
 /**

@@ -7,7 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * 带标签的输入框

@@ -12,8 +12,8 @@ import lc.client.core.factory.TankFactory;
 import lc.client.core.net.NetConnection;
 import lc.client.core.task.TestAutoTankThread;
 import lc.client.core.thread.UserTankThread;
+import lc.client.environment.ClientConstant;
 import lc.client.ui.frame.MainFrame;
-import lc.client.util.ClientConstant;
 
 /**
  * ÓÎÏ·¿ØÖÆÆ÷

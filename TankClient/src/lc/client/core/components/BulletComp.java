@@ -9,7 +9,7 @@ import java.awt.geom.Ellipse2D;
 import java.util.Map;
 
 import lc.client.core.factory.TankFactory;
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * ÅÚµ¯

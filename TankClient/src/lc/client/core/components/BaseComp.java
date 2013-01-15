@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.io.Serializable;
 
-import lc.client.util.ClientConstant;
+import lc.client.environment.ClientConstant;
 
 /**
  * »ù±¾¿Ø¼þ

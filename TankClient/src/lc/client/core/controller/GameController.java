@@ -12,12 +12,12 @@ import lc.client.core.thread.OtherTankThread;
 import lc.client.core.thread.PanelPaintThread;
 import lc.client.core.thread.TimerThread;
 import lc.client.core.thread.UserTankThread;
+import lc.client.environment.ClientConstant;
 import lc.client.ui.components.LMenuItem;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.menu.MainMenu;
 import lc.client.ui.panel.GamePanel;
 import lc.client.ui.panel.HomePanel;
-import lc.client.util.ClientConstant;
 
 /**
  * 游戏状态控制器，加入退出等等

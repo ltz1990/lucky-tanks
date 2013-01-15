@@ -18,6 +18,7 @@ import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
 import lc.client.core.net.NetConnection;
 import lc.client.core.task.LoadingTask;
+import lc.client.environment.ClientConstant;
 import lc.client.ui.components.LMenuItem;
 import lc.client.ui.dialog.GameCreateDialog;
 import lc.client.ui.dialog.GameJoinDialog;
@@ -28,7 +29,6 @@ import lc.client.ui.dialog.RegisterDialog;
 import lc.client.ui.dialog.ServerConfigDialog;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.panel.HomePanel;
-import lc.client.util.ClientConstant;
 import lc.client.util.Debug;
 import lc.client.webservice.RemoteServiceProxy;
 
