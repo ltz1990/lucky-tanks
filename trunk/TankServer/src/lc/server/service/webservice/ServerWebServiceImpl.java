@@ -1,12 +1,21 @@
 package lc.server.service.webservice;
 
-import java.net.SocketAddress;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebService;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import lc.server.database.dao.UserDAO;
 import lc.server.gamecomp.GameHouse;
+import lc.server.gamecomp.UserInfo;
 import lc.server.log.LogUtil;
 import lc.server.service.gameserver.GameCtrlCenter;
 
@@ -25,8 +34,10 @@ public class ServerWebServiceImpl implements ServerWebService{
 		MsgEntry msg=null;
 		UserDAO dao=new UserDAO();
 		try {
-			if(dao.login(username, password)){
+			UserInfo userInfo = dao.login(username, password);
+			if(userInfo!=null){
 				msg=new MsgEntry(true, "登陆成功!");
+				msg.object=userInfo;
 				LogUtil.logger.info("[登陆成功]"+username);
 			}else{
 				msg=new MsgEntry(false,"登陆失败!用户名密码错误!");
@@ -45,12 +56,12 @@ public class ServerWebServiceImpl implements ServerWebService{
 		return msg;
 	}
 	@Override
-	public MsgEntry register(String username, String password) {
+	public MsgEntry register(String username, String password,String name) {
 		// TODO Auto-generated method stub
 		UserDAO dao=new UserDAO();
 		MsgEntry msg=null;
 		try {
-			dao.register(username, password);
+			dao.register(username, password,name);
 			String resultMessage = "用户"+username+"注册成功";
 			msg=new MsgEntry(true, resultMessage);
 			LogUtil.logger.info(resultMessage);
@@ -75,8 +86,38 @@ public class ServerWebServiceImpl implements ServerWebService{
 		// TODO Auto-generated method stub
 		MsgEntry msg=new MsgEntry(true, "创建成功");
 		GameCtrlCenter center = GameCtrlCenter.getInstance();
-		String houseId=center.createGameHouse(house);
-		center.searchAnotherConnInfo(address, houseId);
+		String houseId=center.createGameHouse(house);//得到房间ID
+		house.getCreator().setHouseId(houseId);
+		center.searchAnotherConnInfo(address, house.getCreator());
 		return msg;
+	}
+	@Override
+	public MsgEntry getGameHouses() {
+		// TODO Auto-generated method stub
+		Collection<GameHouse> list=GameCtrlCenter.getInstance().getGameHouses().values();
+		MsgEntry msg=new MsgEntry(true, "得到游戏房间");
+		msg.object=list.toArray();
+		return msg;
+	}
+	@Override
+	public MsgEntry joinGame(UserInfo userInfo, String address) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
+	
+	@XmlType
+	@XmlRootElement
+	public final static class XCollection<V> {
+		@XmlElementWrapper(name = "list")
+		@XmlElement(name = "entry")
+		private List<V> list = null;
+
+		public XCollection(Collection<V> coll) {
+			list=new ArrayList<V>(coll);
+		}
+
+		public void add(V obj) {
+			list.add(obj);
+		}
+	}
 }

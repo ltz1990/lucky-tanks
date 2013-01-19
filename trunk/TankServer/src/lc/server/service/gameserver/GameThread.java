@@ -6,8 +6,11 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import lc.server.gamecomp.UserInfo;
 import lc.server.log.LogUtil;
 
 /**
@@ -25,9 +28,12 @@ public class GameThread implements Runnable {
 	private int activeSockets=0;
 	private ByteBuffer buffer;
 	private static int BUFFER_SIZE=5120;
+	
+	private Map<Integer,UserInfo> players;
 
 	protected GameThread() {
 		msgCenter=new MsgCenter();
+		players=new HashMap<Integer,UserInfo>();
 		buffer=ByteBuffer.allocate(BUFFER_SIZE);//一个新的缓冲区 POS=0，LIM=1024
 		try {
 			selector = Selector.open();
@@ -130,6 +136,15 @@ public class GameThread implements Runnable {
 			// TODO Auto-generated catch block
 			LogUtil.logger.error("注册通道失败！", e);
 		}
+	}
+
+	/**
+	 * 玩家集合
+	 * @author LUCKY 2013-1-15
+	 * @return
+	 */
+	public Map<Integer, UserInfo> getPlayers() {
+		return players;
 	}
 
 }

@@ -8,6 +8,7 @@ package lc.server.service.webservice;
 public class MsgEntry {
 	public boolean result;
 	public String resultMessage;
+	public Object object;
 	
 	public MsgEntry(){
 		
