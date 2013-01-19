@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
+import lc.client.environment.UserInfo;
+
 
 /**
  * <p>Java class for gameHouse complex type.
@@ -16,12 +18,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="creator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="gameThread" type="{http://webservice.service.server.lc/}gameThread" minOccurs="0"/>
- *         &lt;element name="gameType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="creator" type="{http://webservice.service.server.lc/}userInfo" minOccurs="0"/>
+ *         &lt;element name="gameType" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="houseId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="playerCount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="playerCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +34,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "gameHouse", propOrder = {
     "creator",
-    "gameThread",
     "gameType",
     "houseId",
     "name",
@@ -41,22 +41,21 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GameHouse {
 
-    protected String creator;
-    protected GameThread gameThread;
-    protected String gameType;
+    protected UserInfo creator;
+    protected int gameType;
     protected String houseId;
     protected String name;
-    protected String playerCount;
+    protected int playerCount;
 
     /**
      * Gets the value of the creator property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link UserInfo }
      *     
      */
-    public String getCreator() {
+    public UserInfo getCreator() {
         return creator;
     }
 
@@ -65,58 +64,26 @@ public class GameHouse {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link UserInfo }
      *     
      */
-    public void setCreator(String value) {
+    public void setCreator(UserInfo value) {
         this.creator = value;
-    }
-
-    /**
-     * Gets the value of the gameThread property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GameThread }
-     *     
-     */
-    public GameThread getGameThread() {
-        return gameThread;
-    }
-
-    /**
-     * Sets the value of the gameThread property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GameThread }
-     *     
-     */
-    public void setGameThread(GameThread value) {
-        this.gameThread = value;
     }
 
     /**
      * Gets the value of the gameType property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getGameType() {
+    public int getGameType() {
         return gameType;
     }
 
     /**
      * Sets the value of the gameType property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setGameType(String value) {
+    public void setGameType(int value) {
         this.gameType = value;
     }
 
@@ -171,24 +138,16 @@ public class GameHouse {
     /**
      * Gets the value of the playerCount property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getPlayerCount() {
+    public int getPlayerCount() {
         return playerCount;
     }
 
     /**
      * Sets the value of the playerCount property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setPlayerCount(String value) {
+    public void setPlayerCount(int value) {
         this.playerCount = value;
     }
 
