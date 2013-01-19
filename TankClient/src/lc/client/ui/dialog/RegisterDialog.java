@@ -34,18 +34,21 @@ public class RegisterDialog extends LDialog{
 	private static RegisterDialog loginDialog;
 	private LOkCancelButton buttons;
 	private LTextField username;
+	private LTextField name;
 	private LPassWordField password;
 	private LPassWordField password2;
 	private JLabel tips; 
 	
 	private RegisterDialog() {
-		super(MainFrame.getInstance(),"登陆", 300, 210);
-		username=(LTextField)this.add(new LTextField("用户名 :",-10, 30));
+		super(MainFrame.getInstance(),"登陆", 300, 240);
 		TextInputVerifier textInputVerifier = new TextInputVerifier();
+		username=(LTextField)this.add(new LTextField("用户名 :",-10, 30));
 		username.getJTextField().addCaretListener(textInputVerifier);
-		password=(LPassWordField)this.add(new LPassWordField("密码 :",-10,60));
+		name=(LTextField)this.add(new LTextField("昵称 :",-10,60));
+		name.getJTextField().addCaretListener(textInputVerifier);
+		password=(LPassWordField)this.add(new LPassWordField("密码 :",-10,90));
 		password.getJTextField().addCaretListener(textInputVerifier);
-		password2=(LPassWordField)this.add(new LPassWordField("确认密码 :",-10,90));
+		password2=(LPassWordField)this.add(new LPassWordField("确认密码 :",-10,120));
 		password2.getJTextField().addCaretListener(textInputVerifier);
 		tips=(JLabel)this.add(new JLabel());
 		tips.setBounds(10, 5, 280, 30);
@@ -128,11 +131,14 @@ public class RegisterDialog extends LDialog{
 				flag = checkPassword();
 			}else if(input==password2.getJTextField()){
 				flag = checkPassword2();
+			}else if(input==name.getJTextField()){
+				flag = checkName();
 			}
 			if(flag&&username.getValue().length()>0
 					&&password.getValue().length()>0
-					&&password2.getValue().length()>0){
-				if(checkUsername()&&checkPassword()&&checkPassword2()){//再次确认
+					&&password2.getValue().length()>0
+					&&name.getValue().length()>0){
+				if(checkUsername()&&checkPassword()&&checkPassword2()&&checkName()){//再次确认
 					buttons.getOkButton().setEnabled(true);
 				}
 			}else{
@@ -153,6 +159,19 @@ public class RegisterDialog extends LDialog{
 				}else{
 					tips.setText("用户名只能是大小写字母、数字和下划线");
 				}
+			}
+			return flag;
+		}
+		
+		private boolean checkName() {
+			boolean flag;
+			byte[] value = name.getValue()==null?"".getBytes():name.getValue().getBytes();
+			if(value.length>20||value.length<4){
+				flag=false;
+				tips.setText("昵称长度必须在4~20个字符之间");
+			}else{
+				flag=true;
+				tips.setText("");
 			}
 			return flag;
 		}
@@ -208,7 +227,7 @@ public class RegisterDialog extends LDialog{
 			// TODO Auto-generated method stub
 			MsgEntry msg=null;
 			try{
-				msg=RemoteServiceProxy.getInstance().register(username.getValue(), password.getValue());
+				msg=RemoteServiceProxy.getInstance().register(username.getValue(), password.getValue(),name.getValue());
 			}catch(WebServiceException e){
 				if(e.getCause() instanceof ConnectException){
 					msg=new MsgEntry(false, "无法连接到服务器!\n"+e.getCause().getMessage());

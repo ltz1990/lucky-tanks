@@ -1,9 +1,6 @@
 package lc.client.ui.dialog;
 
 import java.awt.Font;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.net.SocketAddress;
 
@@ -11,9 +8,10 @@ import javax.swing.JFrame;
 
 import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
-import lc.client.core.net.MsgCenter;
 import lc.client.core.net.NetConnection;
 import lc.client.environment.ClientConstant;
+import lc.client.environment.RuntimeEnvironment;
+import lc.client.environment.UserInfo;
 import lc.client.ui.components.LComboBox;
 import lc.client.ui.components.LDialog;
 import lc.client.ui.components.LMenuItem;
@@ -21,7 +19,6 @@ import lc.client.ui.components.LOkCancelButton;
 import lc.client.ui.components.LTextField;
 import lc.client.ui.frame.MainFrame;
 import lc.client.ui.menu.MainMenu;
-import lc.client.util.Debug;
 import lc.client.util.FontSetting;
 import lc.client.webservice.RemoteServiceProxy;
 import lc.client.webservice.wscode.GameHouse;
@@ -47,8 +44,8 @@ public class GameCreateDialog extends LDialog {
 		this.add(new LOkCancelButton());
 		gameId=(LTextField) this.add(new LTextField("房间名称",5,30));
 		gameType=(LComboBox)this.add(new LComboBox("游戏模式",5,60));
-		gameType.addItem("抢旗模式",ClientConstant.GAMETYPE_FLAG);
-		gameType.addItem("对战模式",ClientConstant.GAMETYPE_FIGHT);
+		gameType.addItem(ClientConstant.GAMETYPE_NAME.get(ClientConstant.GAMETYPE_FLAG),ClientConstant.GAMETYPE_FLAG);
+		gameType.addItem(ClientConstant.GAMETYPE_NAME.get(ClientConstant.GAMETYPE_FIGHT),ClientConstant.GAMETYPE_FIGHT);
 		playerNum=(LComboBox)this.add(new LComboBox("游戏人数",5,90));
 		playerNum.addItem("2人", 2);
 		playerNum.addItem("4人", 4);
@@ -76,13 +73,11 @@ public class GameCreateDialog extends LDialog {
 			NetConnection.openConnect();
 			SocketAddress address=NetConnection.getSocketChannel().socket().getLocalSocketAddress();
 			GameHouse house=new GameHouse();
-			house.setCreator("liutianzhi");
-			house.setGameType("test");
-			house.setName("我的房间");
-			house.setPlayerCount("10");
+			UserInfo userInfo = RuntimeEnvironment.getUserInfo();
+			initHouse(house, userInfo);
 			RemoteServiceProxy.getInstance().createGame(house,address.toString());
 			TankFactory factory = TankFactory.getInstance();
-			factory.createTank("猩猩是傻逼", ClientConstant.USER);
+			factory.createTank(userInfo.getName(), ClientConstant.USER);
 			GameController.startGame();
 			NetConnection.startNetThread();
 		} catch (IOException e) {
@@ -93,6 +88,19 @@ public class GameCreateDialog extends LDialog {
 			e.printStackTrace();
 		}
 		MainMenu.getInstance().setState(LMenuItem.IN_GAME);
+	}
+
+	/**
+	 * 设置房间数据
+	 * @author LUCKY 2013-1-19
+	 * @param house
+	 * @param userInfo
+	 */
+	private void initHouse(GameHouse house, UserInfo userInfo) {
+		house.setCreator(userInfo);
+		house.setGameType(gameType.getSelectedValue());
+		house.setName(gameId.getValue());
+		house.setPlayerCount(playerNum.getSelectedValue());
 	}
 
 	@Override

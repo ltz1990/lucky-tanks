@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -63,6 +65,11 @@ public class ClientConstant {
 	
 	public static final int GAMETYPE_FLAG=0;//抢旗
 	public static final int GAMETYPE_FIGHT=1;//对战
+	
+	public static HashMap<Integer, String> GAMETYPE_NAME=new HashMap<Integer, String>(){{
+		put(GAMETYPE_FLAG,"抢旗模式");
+		put(GAMETYPE_FIGHT,"对战模式");
+	}};
 	
 	/**
 	 * 加载系统变量
