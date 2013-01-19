@@ -1,13 +1,15 @@
 package lc.server.service.gameserver;
 
-import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+
 import lc.server.gamecomp.GameHouse;
+import lc.server.gamecomp.UserInfo;
 import lc.server.log.LogUtil;
 
 /**
@@ -16,11 +18,13 @@ import lc.server.log.LogUtil;
  */
 public class GameCtrlCenter {
 	private static GameCtrlCenter gameCtrlCenter;
+	@XmlElementWrapper(name = "list")
+	@XmlElement(name = "entry")
 	private Map<String,GameHouse> gameHouses;//房间集合
 	private Map<String,Object> playerConnMate;//玩家连接匹配，用来匹配同一个玩家的WEBSERVICE和NIO
 
 	private GameCtrlCenter(){
-		gameHouses=Collections.synchronizedMap(new HashMap<String,GameHouse>());
+		gameHouses=new HashMap<String,GameHouse>();
 		playerConnMate=new HashMap<String, Object>();
 	}
 	
@@ -47,10 +51,10 @@ public class GameCtrlCenter {
 		GameThread gameThread=new GameThread();
 		house.setGameThread(gameThread);
 		gameThread.start();
-		gameHouses.put(house.getHouseId().toString(), house);//将房间添加到列表中
+		gameHouses.put(house.getHouseId(), house);//将房间添加到列表中
 		LogUtil.logger.info("[创建房间]"+house.toString());
 		return houseId;
-	}
+	} 
 	
 	/**
 	 * 寻找此连接的匹配信息</br>
@@ -64,15 +68,33 @@ public class GameCtrlCenter {
 		Object object = this.playerConnMate.get(address);
 		if(object==null){
 			this.playerConnMate.put(address, obj);
-		}else{
-			if(object instanceof String){//房间的UUID，说明MAP原来保存的是玩家选择房间
-				gameHouses.get((String)object).getGameThread().register((SocketChannel)obj);
+		}else{//玩家加入房间
+			UserInfo userInfo=null;
+			if(object instanceof UserInfo){//房间的UUID，说明MAP原来保存的是玩家选择房间
+				userInfo = (UserInfo)object;
+				GameThread gameThread = gameHouses.get(userInfo.getHouseId()).getGameThread();
+				gameThread.register((SocketChannel)obj);
+				userInfo.setSocketChannel((SocketChannel)obj);
+				gameThread.getPlayers().put(userInfo.getUserId(), userInfo);//将玩家数据（含通道）添加到线程的玩家集合中
 			}else{//说明原来保存的是socketchannel，NIO先连接上
-				gameHouses.get((String)obj).getGameThread().register((SocketChannel)object);
+				userInfo = (UserInfo)obj;
+				GameThread gameThread = gameHouses.get(userInfo.getHouseId()).getGameThread();
+				gameThread.register((SocketChannel)object);
+				userInfo.setSocketChannel((SocketChannel)object);
+				gameThread.getPlayers().put(userInfo.getUserId(), userInfo);
 			}
 			this.playerConnMate.remove(address);//配对成功，移除数据
-			LogUtil.logger.info("[加入房间]"+address);
+			LogUtil.logger.info("[加入房间]"+userInfo.getUsername()+address);
 		}
 	}
+
+	/**
+	 * 得到放假集合
+	 * @author LUCKY 2013-1-15
+	 * @return
+	 */
+	public Map<String, GameHouse> getGameHouses() {
+		return gameHouses;
+	}	
 	
 }
