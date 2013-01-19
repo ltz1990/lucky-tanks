@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.xml.ws.WebServiceException;
 
 import lc.client.core.task.LoadingTask;
+import lc.client.environment.RuntimeEnvironment;
+import lc.client.environment.UserInfo;
 import lc.client.ui.components.LDialog;
 import lc.client.ui.components.LMenuItem;
 import lc.client.ui.components.LOkCancelButton;
@@ -52,6 +54,7 @@ public class LoginDialog extends LDialog{
 		MsgEntry rs = LoadingDialog.getInstance().popUpLoadingDialog(new LoginTask());
 		if(rs.isResult()){//ÊÇ·ñ³É¹¦
 			Debug.showMessageDialog(rs.getResultMessage());
+			RuntimeEnvironment.setUserInfo(((UserInfo)rs.getObject()));
 			MainMenu.getInstance().setState(LMenuItem.NOT_IN_GAME);
 		}else{
 			Debug.errorDialog(rs.getResultMessage(), null);
