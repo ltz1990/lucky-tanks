@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import lc.server.database.DBConnection;
+import lc.server.gamecomp.UserInfo;
 import lc.server.log.LogUtil;
 import lc.server.tools.ServerConstant;
 
@@ -22,12 +23,13 @@ public class UserDAO {
 	 * @param password
 	 * @throws SQLException
 	 */
-	public void register(String username,String password) throws SQLException{
+	public void register(String username,String password,String name) throws SQLException{
 		PreparedStatement pstmt=null;
 		try{
 			pstmt=conn.prepareStatement(ServerConstant.SQL_USER_INSERT);
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
+			pstmt.setString(3, name);
 			pstmt.executeUpdate();
 		}finally{
 			if(pstmt!=null){
@@ -44,7 +46,7 @@ public class UserDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean login(String username,String password) throws SQLException{
+	public UserInfo login(String username,String password) throws SQLException{
 		PreparedStatement pstmt=null;
 		try{
 			pstmt=conn.prepareStatement(ServerConstant.SQL_USER_SELECT);
@@ -52,9 +54,13 @@ public class UserDAO {
 			pstmt.setString(2, password);
 			ResultSet rs=pstmt.executeQuery();
 			if(rs.next()){
-				return true;
+				UserInfo user=new UserInfo();
+				user.setName(rs.getString("name"));
+				user.setUserId(rs.getInt("id"));
+				user.setUsername(rs.getString("username"));
+				return user;
 			}else{
-				return false;
+				return null;
 			}
 		}finally{//在return之后执行
 			if(pstmt!=null){
