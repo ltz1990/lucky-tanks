@@ -24,7 +24,8 @@ public class TankComp extends BaseComp{
 	private transient int statu=ClientConstant.KEY_STOP;//状态:停止，移动
 	private int tankType=1;
 	private String name;
-	private Map<String, TankComp> tankList;
+	private int id; //玩家主键
+	private Map<Integer, TankComp> tankList;
 	/**
 	 * 不序列化
 	 */
@@ -36,13 +37,10 @@ public class TankComp extends BaseComp{
 	
 	private transient BulletComp[] bullet;
 	
-	public TankComp(Point p,int tankType,String name) {
+	public TankComp(String name,int id,int tankType,Point p) {
 		super(p);
 		// TODO Auto-generated constructor stub
-		tankImg_up=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_u.gif"));
-		tankImg_down=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_d.gif"));
-		tankImg_left=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_l.gif"));
-		tankImg_right=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_r.gif"));
+		initImage();
 		//初始化尺寸
 		setSize(new Dimension(ClientConstant.TankWidth<<1, ClientConstant.TankHeight<<1));
 		//初始化炮弹 
@@ -52,7 +50,19 @@ public class TankComp extends BaseComp{
 		}
 		this.name=name;
 		this.tankType=tankType;
+		this.id=id;
 		tankList= TankFactory.getInstance().getTankList();
+	}
+
+	/**
+	 * 初始化坦克图像
+	 * @author LUCKY 2013-1-22
+	 */
+	private void initImage() {
+		tankImg_up=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_u.gif"));
+		tankImg_down=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_d.gif"));
+		tankImg_left=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_l.gif"));
+		tankImg_right=Toolkit.getDefaultToolkit().createImage(getClass().getResource("/images/tank_r.gif"));
 	}
 	
 	/**
@@ -70,7 +80,7 @@ public class TankComp extends BaseComp{
 		if(statu!=ClientConstant.KEY_STOP){
 			this.dirStatu=statu;//记录最后朝向
 			if(tankType==ClientConstant.USER){//用户坦克
-				MsgCenter.addTankMoveMsg(name, getX(), getY(), dirStatu);
+				MsgCenter.addTankMoveMsg(id, getX(), getY(), dirStatu);
 			}
 		}
 	}
@@ -81,7 +91,7 @@ public class TankComp extends BaseComp{
 	private void checkThenMove() {
 		boolean collide=false;//碰撞
 		if(statu==ClientConstant.KEY_RIGHT){
-			for(String key:tankList.keySet()){
+			for(Integer key:tankList.keySet()){
 				TankComp tank=tankList.get(key);
 				if(this.getRightLimit()>tank.getLeftLimit()
 					&&this.getDownLimit()>tank.getUpLimit()
@@ -91,7 +101,7 @@ public class TankComp extends BaseComp{
 				}
 			}
 		}else if(statu==ClientConstant.KEY_LEFT){
-			for(String key:tankList.keySet()){
+			for(Integer key:tankList.keySet()){
 				TankComp tank=tankList.get(key);
 				if(this.getLeftLimit()<tank.getRightLimit()
 					&&this.getDownLimit()>tank.getUpLimit()
@@ -101,7 +111,7 @@ public class TankComp extends BaseComp{
 				}
 			}
 		}else if(statu==ClientConstant.KEY_UP){
-			for(String key:tankList.keySet()){
+			for(Integer key:tankList.keySet()){
 				TankComp tank=tankList.get(key);
 				if(this.getRightLimit()>tank.getLeftLimit()
 					&&this.getLeftLimit()<tank.getRightLimit()
@@ -112,7 +122,7 @@ public class TankComp extends BaseComp{
 				}
 			}
 		}else if(statu==ClientConstant.KEY_DOWN){
-			for(String key:tankList.keySet()){
+			for(Integer key:tankList.keySet()){
 				TankComp tank=tankList.get(key);
 				if(this.getRightLimit()>tank.getLeftLimit()
 					&&this.getLeftLimit()<tank.getRightLimit()
@@ -136,7 +146,7 @@ public class TankComp extends BaseComp{
 			if(!bullet[i].isAlive()){//只射生存态的
 				bullet[i].beShot(getCompPoint(), dirStatu);
 				if(tankType==ClientConstant.USER){//用户坦克先发
-					MsgCenter.addBulletShotMsg(name, getX(),getY(),dirStatu);
+					MsgCenter.addBulletShotMsg(id, getX(),getY(),dirStatu);
 				}
 				break;
 			}

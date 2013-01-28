@@ -7,6 +7,9 @@ import lc.client.core.components.TankComp;
 import lc.client.core.controller.GameController;
 import lc.client.core.factory.TankFactory;
 import lc.client.environment.ClientConstant;
+import lc.client.environment.RuntimeEnvironment;
+import lc.client.environment.UserInfo;
+import lc.client.webservice.RemoteServiceProxy;
 
 /**
  * 消息中心
@@ -24,7 +27,7 @@ public class MsgCenter {
 	public static final String TYPE_BULLET="7";//炮弹发射	
 	public static final String TYPE_CREATE_OTHER_TANK="8"; //创建其它坦克
 	
-	private static Map<String, TankComp> tankList=TankFactory.getInstance().getTankList();
+	private static Map<Integer, TankComp> tankList=TankFactory.getInstance().getTankList();
 	
 	/**
 	 * 创建游戏
@@ -57,8 +60,8 @@ public class MsgCenter {
 	 * @param dirStatus
 	 * @return
 	 */
-	public static final void addTankMoveMsg(String name,int x,int y,int dirStatus){
-		String msg= "["+TYPE_TANK_MOVE+","+name+","+x+","+y+","+dirStatus+"]";
+	public static final void addTankMoveMsg(int id,int x,int y,int dirStatus){
+		String msg= "["+TYPE_TANK_MOVE+","+id+","+x+","+y+","+dirStatus+"]";
 		DataSendThread.getInstance().addMessage(msg);
 	}
 	
@@ -72,7 +75,7 @@ public class MsgCenter {
 	 * @param dirStatus
 	 * @return
 	 */
-	public static final void addBulletShotMsg(String id,int startX,int startY,int dirStatus){
+	public static final void addBulletShotMsg(int id,int startX,int startY,int dirStatus){
 		String msg= "["+TYPE_BULLET+","+id+","+startX+","+startY+","+dirStatus+"]";
 		DataSendThread.getInstance().addMessage(msg);
 	}
@@ -90,13 +93,23 @@ public class MsgCenter {
 				String[] strs = msg.substring(index + 1, endIndex).split(",");
 				try {
 				String msgType = strs[0];//消息类型
+				Integer uid = Integer.valueOf(strs[1]);
 				if (TYPE_TANK_MOVE.equals(msgType)) {//移动
-					TankComp tank = tankList.get(strs[1]);
-					if(tank==null) continue;
+					TankComp tank = tankList.get(uid);
+					if(tank==null){
+						try {
+							UserInfo user=RemoteServiceProxy.getInstance().getPlayer(uid, RuntimeEnvironment.getUserInfo().getHouseId());
+							TankFactory.getInstance().createTank(user.getName(), user.getUserId(), ClientConstant.OTHER, new Point(100,100));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						continue;
+					}
 					tank.moveTo(new Point(Integer.parseInt(strs[2]), Integer.parseInt(strs[3])));
 					tank.setDirStatus(Integer.parseInt(strs[4]));
 				} else if (TYPE_BULLET.equals(msgType)) {//发射
-					TankComp tank = tankList.get(strs[1]);
+					TankComp tank = tankList.get(uid);
 					tank.moveTo(new Point(Integer.parseInt(strs[2]), Integer.parseInt(strs[3])));
 					tank.setDirStatus(Integer.parseInt(strs[4]));
 					tank.shot();
@@ -104,7 +117,7 @@ public class MsgCenter {
 					TankFactory.getInstance().getUserTank().moveTo(new Point(Integer.parseInt(strs[1]),Integer.parseInt(strs[2])));
 					GameController.startGame();
 				} else if (TYPE_CREATE_OTHER_TANK.equals(msgType)) {//创建其它坦克
-					TankFactory.getInstance().createTank(strs[1],ClientConstant.OTHER,new Point(Integer.parseInt(strs[2]), Integer.parseInt(strs[3])));
+					//TankFactory.getInstance().createTank(strs[1],ClientConstant.OTHER,new Point(Integer.parseInt(strs[2]), Integer.parseInt(strs[3])));
 					System.out.println(msg);
 				} else if (TYPE_CREATE_SUCCESS.equals(msgType)){//创建成功
 					

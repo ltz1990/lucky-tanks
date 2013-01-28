@@ -1,6 +1,7 @@
 package lc.client.ui.dialog;
 
 import java.awt.Font;
+import java.awt.Point;
 import java.io.IOException;
 import java.net.SocketAddress;
 
@@ -22,6 +23,7 @@ import lc.client.ui.menu.MainMenu;
 import lc.client.util.FontSetting;
 import lc.client.webservice.RemoteServiceProxy;
 import lc.client.webservice.wscode.GameHouse;
+import lc.client.webservice.wscode.MsgEntry;
 
 /**
  * 创建游戏窗口
@@ -72,14 +74,16 @@ public class GameCreateDialog extends LDialog {
 		try {
 			NetConnection.openConnect();
 			SocketAddress address=NetConnection.getSocketChannel().socket().getLocalSocketAddress();
-			GameHouse house=new GameHouse();
 			UserInfo userInfo = RuntimeEnvironment.getUserInfo();
+			GameHouse house=new GameHouse();
 			initHouse(house, userInfo);
-			RemoteServiceProxy.getInstance().createGame(house,address.toString());
+			MsgEntry msg=RemoteServiceProxy.getInstance().createGame(house,address.toString());
+			userInfo.setHouseId(msg.getObject().toString());
 			TankFactory factory = TankFactory.getInstance();
-			factory.createTank(userInfo.getName(), ClientConstant.USER);
+			factory.createTank(userInfo.getName(),userInfo.getUserId(), ClientConstant.USER,new Point(100,100));
 			GameController.startGame();
 			NetConnection.startNetThread();
+			MainMenu.getInstance().setState(LMenuItem.IN_GAME);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,7 +91,6 @@ public class GameCreateDialog extends LDialog {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		MainMenu.getInstance().setState(LMenuItem.IN_GAME);
 	}
 
 	/**
