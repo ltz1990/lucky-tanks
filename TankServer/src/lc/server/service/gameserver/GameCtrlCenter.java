@@ -1,5 +1,6 @@
 package lc.server.service.gameserver;
 
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,8 +64,9 @@ public class GameCtrlCenter {
 	 * @author LUCKY 2013-1-14
 	 * @param address
 	 * @param obj
+	 * @throws ClosedChannelException 
 	 */
-	public synchronized void searchAnotherConnInfo(String address,Object obj){
+	public synchronized void searchAnotherConnInfo(String address,Object obj) throws ClosedChannelException{
 		Object object = this.playerConnMate.get(address);
 		if(object==null){
 			this.playerConnMate.put(address, obj);
@@ -74,7 +76,7 @@ public class GameCtrlCenter {
 				userInfo = (UserInfo)object;
 				GameThread gameThread = gameHouses.get(userInfo.getHouseId()).getGameThread();
 				gameThread.register((SocketChannel)obj);
-				userInfo.setSocketChannel((SocketChannel)obj);
+				userInfo.setSocketChannel((SocketChannel)obj);//添加通道到玩家信息中
 				gameThread.getPlayers().put(userInfo.getUserId(), userInfo);//将玩家数据（含通道）添加到线程的玩家集合中
 			}else{//说明原来保存的是socketchannel，NIO先连接上
 				userInfo = (UserInfo)obj;

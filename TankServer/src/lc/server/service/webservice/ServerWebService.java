@@ -44,7 +44,7 @@ public interface ServerWebService {
 	 * @author LUCKY 2013-1-15
 	 * @return
 	 */
-	public MsgEntry getGameHouses();
+	public GameHouse[] getGameHouses();
 	
 	/**
 	 * 加入游戏
@@ -54,5 +54,13 @@ public interface ServerWebService {
 	 * @return
 	 */
 	public MsgEntry joinGame(UserInfo userInfo,String address);
+	
+	/**
+	 * 获得玩家信息
+	 * @author LUCKY 2013-1-22
+	 * @param id
+	 * @return
+	 */
+	public UserInfo getPlayer(int id,String houseId);
 
 }

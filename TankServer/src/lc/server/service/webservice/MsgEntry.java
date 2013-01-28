@@ -9,6 +9,7 @@ public class MsgEntry {
 	public boolean result;
 	public String resultMessage;
 	public Object object;
+	public Object objectList[];
 	
 	public MsgEntry(){
 		

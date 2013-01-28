@@ -29,7 +29,7 @@ public class GameThread implements Runnable {
 	private ByteBuffer buffer;
 	private static int BUFFER_SIZE=5120;
 	
-	private Map<Integer,UserInfo> players;
+	private Map<Integer,UserInfo> players;//<玩家主键，玩家信息（含通道）>
 
 	protected GameThread() {
 		msgCenter=new MsgCenter();
@@ -94,9 +94,9 @@ public class GameThread implements Runnable {
 			}
 			buffer.flip();//pos=0,lim=N	
 			//System.out.println(buffer);
-			msgCenter.msgProcess(buffer,client);
+			//msgCenter.msgProcess(buffer,client);
 			//System.out.println(buffer);
-			for(SelectionKey other:selector.selectedKeys()){//多播 key是所有的，包括cancel的 。selectionKey是活动的				
+			for(SelectionKey other:selector.keys()){//多播 key是所有的，包括cancel的 。selectionKey是活动的				
 				if(!other.isValid()||other==key||other.isAcceptable()){//如果是当前客户端或者如果是服务器通道则不可读
 					continue;
 				}
@@ -125,16 +125,12 @@ public class GameThread implements Runnable {
 	/**
 	 * 注册通道到当前房间
 	 * @param channel
+	 * @throws ClosedChannelException 
 	 */
-	public void register(SocketChannel channel) {
-		try {
-			synchronized (lock) {				
-				selector.wakeup();// 需要唤醒，不然selector阻塞的时候无法注册
-				channel.register(this.selector, SelectionKey.OP_READ);
-			}
-		} catch (ClosedChannelException e) {
-			// TODO Auto-generated catch block
-			LogUtil.logger.error("注册通道失败！", e);
+	public void register(SocketChannel channel) throws ClosedChannelException {
+		synchronized (lock) {				
+			selector.wakeup();// 需要唤醒，不然selector阻塞的时候无法注册
+			channel.register(this.selector, SelectionKey.OP_READ);
 		}
 	}
 
