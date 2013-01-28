@@ -35,6 +35,8 @@ public class ObjectFactory {
     private final static QName _GetGameHouses_QNAME = new QName("http://webservice.service.server.lc/", "getGameHouses");
     private final static QName _Login_QNAME = new QName("http://webservice.service.server.lc/", "login");
     private final static QName _RegisterResponse_QNAME = new QName("http://webservice.service.server.lc/", "registerResponse");
+    private final static QName _GetPlayer_QNAME = new QName("http://webservice.service.server.lc/", "getPlayer");
+    private final static QName _GetPlayerResponse_QNAME = new QName("http://webservice.service.server.lc/", "getPlayerResponse");
     private final static QName _JoinGame_QNAME = new QName("http://webservice.service.server.lc/", "joinGame");
 
     /**
@@ -42,62 +44,6 @@ public class ObjectFactory {
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link CreateGame }
-     * 
-     */
-    public CreateGame createCreateGame() {
-        return new CreateGame();
-    }
-
-    /**
-     * Create an instance of {@link RegisterResponse }
-     * 
-     */
-    public RegisterResponse createRegisterResponse() {
-        return new RegisterResponse();
-    }
-
-    /**
-     * Create an instance of {@link JoinGameResponse }
-     * 
-     */
-    public JoinGameResponse createJoinGameResponse() {
-        return new JoinGameResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoginResponse }
-     * 
-     */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
-    }
-
-    /**
-     * Create an instance of {@link UserInfo }
-     * 
-     */
-    public UserInfo createUserInfo() {
-        return new UserInfo();
-    }
-
-    /**
-     * Create an instance of {@link Login }
-     * 
-     */
-    public Login createLogin() {
-        return new Login();
-    }
-
-    /**
-     * Create an instance of {@link Register }
-     * 
-     */
-    public Register createRegister() {
-        return new Register();
     }
 
     /**
@@ -109,11 +55,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetGameHouses }
+     * Create an instance of {@link GetPlayerResponse }
      * 
      */
-    public GetGameHouses createGetGameHouses() {
-        return new GetGameHouses();
+    public GetPlayerResponse createGetPlayerResponse() {
+        return new GetPlayerResponse();
+    }
+
+    /**
+     * Create an instance of {@link UserInfo }
+     * 
+     */
+    public UserInfo createUserInfo() {
+        return new UserInfo();
     }
 
     /**
@@ -125,11 +79,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetGameHousesResponse }
+     * Create an instance of {@link GetGameHouses }
      * 
      */
-    public GetGameHousesResponse createGetGameHousesResponse() {
-        return new GetGameHousesResponse();
+    public GetGameHouses createGetGameHouses() {
+        return new GetGameHouses();
     }
 
     /**
@@ -141,11 +95,75 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Register }
+     * 
+     */
+    public Register createRegister() {
+        return new Register();
+    }
+
+    /**
+     * Create an instance of {@link Login }
+     * 
+     */
+    public Login createLogin() {
+        return new Login();
+    }
+
+    /**
+     * Create an instance of {@link JoinGameResponse }
+     * 
+     */
+    public JoinGameResponse createJoinGameResponse() {
+        return new JoinGameResponse();
+    }
+
+    /**
+     * Create an instance of {@link RegisterResponse }
+     * 
+     */
+    public RegisterResponse createRegisterResponse() {
+        return new RegisterResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateGame }
+     * 
+     */
+    public CreateGame createCreateGame() {
+        return new CreateGame();
+    }
+
+    /**
+     * Create an instance of {@link GetPlayer }
+     * 
+     */
+    public GetPlayer createGetPlayer() {
+        return new GetPlayer();
+    }
+
+    /**
      * Create an instance of {@link MsgEntry }
      * 
      */
     public MsgEntry createMsgEntry() {
         return new MsgEntry();
+    }
+
+    /**
+     * Create an instance of {@link GetGameHousesResponse }
+     * 
+     */
+    public GetGameHousesResponse createGetGameHousesResponse() {
+        return new GetGameHousesResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoginResponse }
+     * 
+     */
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
     }
 
     /**
@@ -227,6 +245,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://webservice.service.server.lc/", name = "registerResponse")
     public JAXBElement<RegisterResponse> createRegisterResponse(RegisterResponse value) {
         return new JAXBElement<RegisterResponse>(_RegisterResponse_QNAME, RegisterResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetPlayer }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservice.service.server.lc/", name = "getPlayer")
+    public JAXBElement<GetPlayer> createGetPlayer(GetPlayer value) {
+        return new JAXBElement<GetPlayer>(_GetPlayer_QNAME, GetPlayer.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetPlayerResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservice.service.server.lc/", name = "getPlayerResponse")
+    public JAXBElement<GetPlayerResponse> createGetPlayerResponse(GetPlayerResponse value) {
+        return new JAXBElement<GetPlayerResponse>(_GetPlayerResponse_QNAME, GetPlayerResponse.class, null, value);
     }
 
     /**

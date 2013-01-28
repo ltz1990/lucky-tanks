@@ -1,6 +1,8 @@
 
 package lc.client.webservice.wscode;
 
+import java.util.List;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -24,6 +26,26 @@ import lc.client.environment.UserInfo;
 })
 public interface ServerWebService {
 
+
+    /**
+     * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns lc.client.webservice.wscode.MsgEntry
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "register", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.Register")
+    @ResponseWrapper(localName = "registerResponse", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.RegisterResponse")
+    public MsgEntry register(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        String arg2);
 
     /**
      * 
@@ -62,13 +84,13 @@ public interface ServerWebService {
     /**
      * 
      * @return
-     *     returns lc.client.webservice.wscode.MsgEntry
+     *     returns java.util.List<lc.client.webservice.wscode.GameHouse>
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getGameHouses", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.GetGameHouses")
     @ResponseWrapper(localName = "getGameHousesResponse", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.GetGameHousesResponse")
-    public MsgEntry getGameHouses();
+    public List<GameHouse> getGameHouses();
 
     /**
      * 
@@ -89,22 +111,19 @@ public interface ServerWebService {
 
     /**
      * 
-     * @param arg2
      * @param arg1
      * @param arg0
      * @return
-     *     returns lc.client.webservice.wscode.MsgEntry
+     *     returns lc.client.webservice.wscode.UserInfo
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "register", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.Register")
-    @ResponseWrapper(localName = "registerResponse", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.RegisterResponse")
-    public MsgEntry register(
+    @RequestWrapper(localName = "getPlayer", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.GetPlayer")
+    @ResponseWrapper(localName = "getPlayerResponse", targetNamespace = "http://webservice.service.server.lc/", className = "lc.client.webservice.wscode.GetPlayerResponse")
+    public UserInfo getPlayer(
         @WebParam(name = "arg0", targetNamespace = "")
-        String arg0,
+        int arg0,
         @WebParam(name = "arg1", targetNamespace = "")
-        String arg1,
-        @WebParam(name = "arg2", targetNamespace = "")
-        String arg2);
+        String arg1);
 
 }
