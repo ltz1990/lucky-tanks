@@ -150,7 +150,15 @@ public abstract class LDialog extends JInternalFrame implements ILWindow{
 		}else if("CANCEL".equals(actionCommand)){
 			this.closeDialog();
 		}
+		btnElse(actionCommand);
 	}
+
+	/**
+	 * 其它按钮事件
+	 * @author LUCKY 2013-1-19
+	 * @param e
+	 */
+	protected void btnElse(String actionCommand) {}
 
 	/**
 	 * 设置模态，参考JAVA源码</br>

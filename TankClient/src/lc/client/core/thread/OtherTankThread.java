@@ -20,7 +20,7 @@ import lc.client.util.Debug;
  */
 public class OtherTankThread implements ITimeCtrl{
 	private static OtherTankThread otherTankThread;
-	private Map<String,TankComp> tankList;
+	private Map<Integer,TankComp> tankList;
 	private Thread thread;
 	private int timeLine=0;
 	private int thisLine=0;
@@ -55,7 +55,7 @@ public class OtherTankThread implements ITimeCtrl{
 	public void run() {
 		// TODO Auto-generated method stub
 		while(GameController.gameSwitch){
-			for(String key:tankList.keySet()){
+			for(Integer key:tankList.keySet()){
 				TankComp tank=tankList.get(key);
 				BulletComp[] bullets = tank.getBullets();
 				for(int i=0;i<ClientConstant.BULLET_MAX_AMOUNT;i++){

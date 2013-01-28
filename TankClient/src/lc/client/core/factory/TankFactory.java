@@ -14,12 +14,12 @@ import lc.client.environment.ClientConstant;
  */
 public class TankFactory {
 	private static TankFactory factory;
-	private Map<String,TankComp> tankList=null;
+	private Map<Integer,TankComp> tankList=null;
 	private TankComp userTank=null;
 	
 	private TankFactory(){
 		//tankList=Collections.synchronizedList(new LinkedList<TankComp>());
-		tankList=new HashMap<String,TankComp>(16);//需要大量随机访问，同时需要遍历速度
+		tankList=new HashMap<Integer,TankComp>(16);//需要大量随机访问，同时需要遍历速度
 	}
 	
 	/**
@@ -33,31 +33,31 @@ public class TankFactory {
 		return factory;
 	}
 	
-	/**
+/*	*//**
 	 * 创建坦克
 	 * 此方法需修改，关联服务器</br>
 	 * 采用默认坐标，不建议使用
 	 * @param user
 	 * @return
 	 * @deprecated
-	 */
+	 *//*
 	public void createTank(String name,int user){
 		switch(user){
-		case 0:userTank=new TankComp(new Point(100,100),ClientConstant.USER,name);break;
-		case 1:tankList.put(name,new TankComp(new Point(100,100),ClientConstant.OTHER,name));break;
+		//case 0:userTank=new TankComp(name,id,ClientConstant.USER,new Point(100,100));break;
+		//case 1:tankList.put(name,new TankComp(new Point(100,100),ClientConstant.OTHER,name));break;
 		default:break;
 		}
-	}
+	}*/
 	
 	/**
 	 * 创建坦克,服务器给坐标
 	 * @param user
 	 * @return
 	 */
-	public void createTank(String name,int user,Point p){
+	public void createTank(String name,int id,int user,Point p){
 		switch(user){
-		case 0:userTank=new TankComp(p,ClientConstant.USER,name);break;
-		case 1:tankList.put(name,new TankComp(p,ClientConstant.OTHER,name));break;
+		case 0:userTank=new TankComp(name,id,ClientConstant.USER,p);break;
+		case 1:tankList.put(id,new TankComp(name,id,user,p));break;
 		default:break;
 		}
 	}
@@ -66,7 +66,7 @@ public class TankFactory {
 	 * 得到坦克集合
 	 * @return
 	 */
-	public Map<String,TankComp> getTankList(){
+	public Map<Integer,TankComp> getTankList(){
 		return tankList;
 	}
 	

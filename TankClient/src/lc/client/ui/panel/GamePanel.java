@@ -18,7 +18,7 @@ import lc.client.environment.ClientConstant;
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static GamePanel gamePanel;
-	private Map<String,TankComp> otherTanks;
+	private Map<Integer,TankComp> otherTanks;
 	private TankComp myTank;//ÓÃ»§Ì¹¿Ë
 	
 	/**
@@ -56,7 +56,7 @@ public class GamePanel extends JPanel {
 		super.paint(g);
 		//if(getMyTank()!=null){
 		myTank.paint(g);
-		for(String key:otherTanks.keySet()){
+		for(Integer key:otherTanks.keySet()){
 			otherTanks.get(key).paint(g);
 		}
 		//}

@@ -18,7 +18,7 @@ import lc.client.environment.ClientConstant;
  */
 public class BulletComp extends BaseComp{
 	private static final long serialVersionUID = 1L;
-	private Map<String, TankComp> tankList;
+	private Map<Integer, TankComp> tankList;
 	private BaseComp parent;
 	private boolean alive=false;
 	private int dir=0;//方向
@@ -61,7 +61,7 @@ public class BulletComp extends BaseComp{
 	 * 碰撞监测
 	 */
 	private void collideCheck(){
-		for(String key:tankList.keySet()){
+		for(Integer key:tankList.keySet()){
 			TankComp otherTank=tankList.get(key);
 			if(otherTank==this.parent) continue;//不跟自己做碰撞监测
 			if(this.getX()>otherTank.getLeftLimit()
