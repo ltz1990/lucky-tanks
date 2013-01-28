@@ -1,17 +1,10 @@
 package lc.server.service.webservice;
 
+import java.nio.channels.ClosedChannelException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import javax.jws.WebService;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import lc.server.database.dao.UserDAO;
 import lc.server.gamecomp.GameHouse;
@@ -84,40 +77,47 @@ public class ServerWebServiceImpl implements ServerWebService{
 	@Override
 	public MsgEntry createGame(GameHouse house,String address) {
 		// TODO Auto-generated method stub
-		MsgEntry msg=new MsgEntry(true, "创建成功");
-		GameCtrlCenter center = GameCtrlCenter.getInstance();
-		String houseId=center.createGameHouse(house);//得到房间ID
-		house.getCreator().setHouseId(houseId);
-		center.searchAnotherConnInfo(address, house.getCreator());
+		MsgEntry msg=new MsgEntry();
+		try{
+			GameCtrlCenter center = GameCtrlCenter.getInstance();
+			String houseId=center.createGameHouse(house);//得到房间ID
+			house.getCreator().setHouseId(houseId);
+			center.searchAnotherConnInfo(address, house.getCreator());
+			msg.result=true;
+			msg.resultMessage="创建成功";
+			msg.object=houseId;
+		}catch(ClosedChannelException e){
+			msg.result=false;
+			msg.resultMessage="通道注册失败\n"+e.getMessage();
+		}
 		return msg;
 	}
 	@Override
-	public MsgEntry getGameHouses() {
+	public GameHouse[] getGameHouses() {
 		// TODO Auto-generated method stub
 		Collection<GameHouse> list=GameCtrlCenter.getInstance().getGameHouses().values();
-		MsgEntry msg=new MsgEntry(true, "得到游戏房间");
-		msg.object=list.toArray();
-		return msg;
+		return list.toArray(new GameHouse[0]);
 	}
 	@Override
 	public MsgEntry joinGame(UserInfo userInfo, String address) {
 		// TODO Auto-generated method stub
-		return null;
-	}	
-	
-	@XmlType
-	@XmlRootElement
-	public final static class XCollection<V> {
-		@XmlElementWrapper(name = "list")
-		@XmlElement(name = "entry")
-		private List<V> list = null;
-
-		public XCollection(Collection<V> coll) {
-			list=new ArrayList<V>(coll);
+		MsgEntry msg=new MsgEntry();
+		try {
+			GameCtrlCenter.getInstance().searchAnotherConnInfo(address, userInfo);
+			msg.result=true;
+			msg.resultMessage="加入成功";
+			msg.objectList=GameCtrlCenter.getInstance().getGameHouses().get(userInfo.getHouseId()).getGameThread().getPlayers().values().toArray(new UserInfo[0]);			
+		}catch(ClosedChannelException e){
+			msg.result=false;
+			msg.resultMessage="通道注册失败\n"+e.getMessage();
 		}
-
-		public void add(V obj) {
-			list.add(obj);
-		}
+		return msg;
 	}
+	@Override
+	public UserInfo getPlayer(int id,String houseId) {
+		// TODO Auto-generated method stub
+		GameHouse house=GameCtrlCenter.getInstance().getGameHouses().get(houseId);
+		UserInfo user=house.getGameThread().getPlayers().get(id);
+		return user;
+	}	
 }
